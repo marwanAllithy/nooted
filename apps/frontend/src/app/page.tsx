@@ -1,5 +1,6 @@
+"use client";
+
 import Image, { type ImageProps } from "next/image";
-import styles from "./page.module.css";
 import Editor from "@/components/editor";
 
 type Props = Omit<ImageProps, "src"> & {
@@ -9,8 +10,9 @@ type Props = Omit<ImageProps, "src"> & {
 
 export default function Home() {
  return (
-  <div className={styles.page}>
+  <div className="h-screen p-10">
    <Editor />
   </div>
  );
 }
+ 
