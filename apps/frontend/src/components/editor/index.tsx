@@ -24,12 +24,18 @@ const blockSchema = [
 
 export default function Editor({}: Props) {
  const [blocks, setBlocks] = useState(blockSchema);
- const [indexList, setIndexList] = useState([0]);
  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
  const addBlock = (index: number) => {
   setBlocks((prevBlocks) => {
    const newBlocks = [...prevBlocks];
+   newBlocks.push({
+    id: newBlocks.length + 1,
+    type: "text",
+    data: {
+     text: "",
+    },
+   });
    newBlocks.splice(index + 1, 0, {
     id: newBlocks.length + 1,
     type: "text",
