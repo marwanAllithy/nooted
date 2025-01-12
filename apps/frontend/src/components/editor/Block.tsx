@@ -22,6 +22,7 @@ type Props = {
    text: string;
   };
  };
+ handleBlockChange: any;
 };
 
 export default function Block({
@@ -29,9 +30,11 @@ export default function Block({
  block,
  addBlock,
  inputRef,
+ handleBlockChange,
  handleKeyNavigation,
 }: Props) {
  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  handleBlockChange(index, event.currentTarget.innerText);
   console.log("key: ", event.key);
   if (event.key === "Enter") {
    event.preventDefault();
@@ -48,6 +51,7 @@ export default function Block({
    return (
     <TextBlock
      handleKeyDown={handleKeyDown}
+     handleBlockChange={handleBlockChange}
      inputRef={inputRef}
      text={block.data.text}
     />

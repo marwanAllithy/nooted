@@ -1,26 +1,34 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import Block from "./Block";
 
 type Props = {};
 
 const blockSchema = [
  {
+  id: 0,
   type: "text",
-  id: 1,
   data: {
    text: "Hello, world!",
   },
  },
  {
-  type: "text",
   id: 1,
+  type: "text",
   data: {
    text: "Hello, world!",
   },
  },
 ];
+
+function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
+ let timeout: NodeJS.Timeout;
+ return (...args: Parameters<T>) => {
+  clearTimeout(timeout);
+  timeout = setTimeout(() => func(...args), wait);
+ };
+}
 
 export default function Editor({}: Props) {
  const [blocks, setBlocks] = useState(blockSchema);
@@ -29,30 +37,37 @@ export default function Editor({}: Props) {
  const addBlock = (index: number) => {
   setBlocks((prevBlocks) => {
    const newBlocks = [...prevBlocks];
-   newBlocks.push({
-    id: newBlocks.length + 1,
-    type: "text",
-    data: {
-     text: "",
-    },
-   });
-   newBlocks.splice(index + 1, 0, {
-    id: newBlocks.length + 1,
-    type: "text",
-    data: {
-     text: "",
-    },
+   const firstHalf = newBlocks.slice(0, index + 1);
+   const secondHalf = newBlocks.slice(index + 1);
+
+   const parsedSecondHalf = secondHalf.map((block) => {
+    return {
+     ...block,
+     id: block.id + 1,
+    };
    });
 
-   console.log(newBlocks);
+   const newBlock = {
+    id: index + 1,
+    type: "text",
+    data: {
+     text: "",
+    },
+   };
+
+   console.log("first half", firstHalf);
+   console.log("second half", secondHalf);
+   console.log("new blocks", [...firstHalf, newBlock, ...parsedSecondHalf]);
    console.log("inputref", inputRefs);
-   return newBlocks;
+   console.log("index", index);
+
+   return [...firstHalf, newBlock, ...parsedSecondHalf];
   });
 
   // focuses on the new input
   setTimeout(() => {
    inputRefs.current[index + 1]?.focus();
-  }, 0);
+  }, 10);
  };
  const handleKeyNavigation = (index: number, direction: string) => {
   if (direction === "ArrowUp" && index > 0) {
@@ -65,6 +80,18 @@ export default function Editor({}: Props) {
   }
  };
 
+ const handleBlockChange = useMemo(
+  () =>
+   debounce((index: number, text: string) => {
+    setBlocks((prev) =>
+     prev.map((block, i) =>
+      i === index ? { ...block, data: { text } } : block
+     )
+    );
+   }, 400),
+  []
+ );
+
  return (
   <div className="">
    {blocks.map((block, index) => (
@@ -72,6 +99,7 @@ export default function Editor({}: Props) {
      block={block}
      handleKeyNavigation={handleKeyNavigation}
      index={index}
+     handleBlockChange={handleBlockChange}
      addBlock={addBlock}
      inputRef={(el) => (inputRefs.current[index] = el)}
     />
