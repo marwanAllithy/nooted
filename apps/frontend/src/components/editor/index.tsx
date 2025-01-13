@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useRef, useMemo } from "react";
+import React, { useState, useRef, useMemo, useEffect } from "react";
 import Block from "./Block";
+import saveTextBlocks from "@/lib/helper/saveTextBlocks";
 
 type Props = {};
 
@@ -22,16 +23,9 @@ const blockSchema = [
  },
 ];
 
-function debounce<T extends (...args: any[]) => void>(func: T, wait: number) {
- let timeout: NodeJS.Timeout;
- return (...args: Parameters<T>) => {
-  clearTimeout(timeout);
-  timeout = setTimeout(() => func(...args), wait);
- };
-}
-
 export default function Editor({}: Props) {
  const [blocks, setBlocks] = useState(blockSchema);
+ const [loading, setLoading] = useState(false);
  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
  const addBlock = (index: number) => {
@@ -80,17 +74,14 @@ export default function Editor({}: Props) {
   }
  };
 
- const handleBlockChange = useMemo(
-  () =>
-   debounce((index: number, text: string) => {
-    setBlocks((prev) =>
-     prev.map((block, i) =>
-      i === index ? { ...block, data: { text } } : block
-     )
-    );
-   }, 400),
-  []
- );
+ // TODO: do a wholistic saving system
+ useEffect(() => {
+  const intervalId = setInterval(() => {
+   saveTextBlocks(inputRefs, blocks, setBlocks, loading, setLoading);
+  }, 10000); // 10000 milliseconds = 10 seconds
+
+  return () => clearInterval(intervalId); // Cleanup interval on component unmount
+ }, [inputRefs, blocks, loading, setLoading]);
 
  return (
   <div className="">
@@ -99,7 +90,6 @@ export default function Editor({}: Props) {
      block={block}
      handleKeyNavigation={handleKeyNavigation}
      index={index}
-     handleBlockChange={handleBlockChange}
      addBlock={addBlock}
      inputRef={(el) => (inputRefs.current[index] = el)}
     />
