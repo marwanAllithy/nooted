@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useMemo, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Block from "./Block";
 import saveTextBlocks from "@/lib/helper/saveTextBlocks";
 
@@ -83,6 +83,7 @@ export default function Editor({}: Props) {
   return () => clearInterval(intervalId); // Cleanup interval on component unmount
  }, [inputRefs, blocks, loading, setLoading]);
 
+ 
  return (
   <div className="">
    {blocks.map((block, index) => (
@@ -90,6 +91,7 @@ export default function Editor({}: Props) {
      block={block}
      handleKeyNavigation={handleKeyNavigation}
      index={index}
+     key={block.id}
      addBlock={addBlock}
      inputRef={(el) => (inputRefs.current[index] = el)}
     />

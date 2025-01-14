@@ -10,14 +10,17 @@ export default function saveTextBlocks(
  setLoading(false);
 
  const updatedBlocks = blocks.map((block: any) => {
-  if (block.type !== "calender") {
+  if (block.type !== "calendar") {
    const inputRef = inputRefs.current[block.id];
 
-   block.data.text = inputRef.innerText;
+   if (inputRef) {
+    block.data.text = inputRef.innerText;
+   }
   }
+  return block;
  });
 
- console.log(blocks);
+ console.log(updatedBlocks);
  setBlocks(updatedBlocks);
  setLoading(true);
 

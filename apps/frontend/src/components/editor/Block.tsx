@@ -43,7 +43,7 @@ export default function Block({
   }
  };
 
- switch (block.type) {
+ switch (block?.type) {
   case "text":
    return (
     <TextBlock
@@ -52,7 +52,6 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
 
   case "h1":
    return (
@@ -62,7 +61,6 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
 
   case "h2":
    return (
@@ -72,7 +70,6 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
 
   case "h3":
    return (
@@ -82,7 +79,6 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
 
   case "h4":
    return (
@@ -92,7 +88,6 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
 
   case "h5":
    return (
@@ -102,7 +97,6 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
 
   case "h6":
    return (
@@ -112,6 +106,14 @@ export default function Block({
      text={block.data.text}
     />
    );
-   break;
+
+  default:
+     return (
+      <TextBlock
+       handleKeyDown={handleKeyDown}
+       inputRef={inputRef}
+       text={block?.data.text}
+      />
+     );
  }
 }
