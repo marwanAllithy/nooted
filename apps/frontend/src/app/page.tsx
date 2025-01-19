@@ -15,4 +15,7 @@ export default function Home() {
   </div>
  );
 }
- 
+sudo pacman -S xclip
+sudo pacman -S xclip
+sudo pacman -S xclip
+sudo pacman -S xclip
