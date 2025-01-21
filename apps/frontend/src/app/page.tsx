@@ -2,6 +2,7 @@
 
 import Image, { type ImageProps } from "next/image";
 import Editor from "@/components/editor";
+import EditorComponent from "@/components/editor/Editor";
 
 type Props = Omit<ImageProps, "src"> & {
  srcLight: string;
@@ -11,11 +12,8 @@ type Props = Omit<ImageProps, "src"> & {
 export default function Home() {
  return (
   <div className="h-screen p-10">
-   <Editor />
+   {/* <Editor /> */}
+   <EditorComponent/>
   </div>
  );
 }
-sudo pacman -S xclip
-sudo pacman -S xclip
-sudo pacman -S xclip
-sudo pacman -S xclip

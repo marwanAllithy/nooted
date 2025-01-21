@@ -1,10 +1,10 @@
 export class Block {
-  id: number;
+  level: number;
   type: string;
   data: { text: string };
 
-  constructor(id: number, type: string, text: string) {
-    this.id = id;
+  constructor(level: number, type: string, text: string) {
+    this.level = level;
     this.type = type;
     this.data = { text };
   }
