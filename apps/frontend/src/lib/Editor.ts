@@ -1,4 +1,5 @@
 // src/lib/Editor.ts
+import { BlockType } from "@/types/editor";
 import { Block } from "./Block";
 
 export class Editor {
@@ -8,7 +9,7 @@ export class Editor {
   this.blocks = [];
  }
 
- addBlock(type: string, text: string, currLevel: number) {
+ addBlock(type: BlockType, text: string, currLevel: number) {
   const id = this.blocks.length;
   const newBlock = new Block(id, type, text);
   this.blocks.push(newBlock);
@@ -23,21 +24,23 @@ export class Editor {
 
  moveFocusUp(
   currLevel: number,
-  inputRefs: React.RefObject<(HTMLDivElement | null)[]>
+  // inputRefs: React.RefObject<(HTMLDivElement | null)[]>
+  inputRefs: any
  ) {
   const index = this.blocks.findIndex((block) => block.level === currLevel);
   if (index > 0) {
-   inputRefs.current[index - 1]?.focus();
+   inputRefs?.current[index - 1]?.focus();
   }
  }
 
  moveFocusDown(
   currLevel: number,
-  inputRefs: React.RefObject<(HTMLDivElement | null)[]>
+  // inputRefs: React.RefObject<(HTMLDivElement | null)[]>
+  inputRefs: any
  ) {
   const index = this.blocks.findIndex((block) => block.level === currLevel);
-  if (index < inputRefs.current.length - 1) {
-   inputRefs.current[index + 1]?.focus();
+  if (index < inputRefs?.current.length - 1) {
+   inputRefs?.current[index + 1]?.focus();
   }
  }
 

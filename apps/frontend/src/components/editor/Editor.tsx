@@ -8,6 +8,11 @@ export default function EditorComponent() {
  const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
  const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
 
+ // pop up  state
+ const [showPopup, setShowPopup] = useState(false);
+ const [popupTerm, setPopupTerm] = useState("");
+ const [activeBlockIndex, setActiveBlockIndex] = useState<number | null>(null);
+
  const addBlock = (currLevel: number) => {
   editor.addBlock("text", "", currLevel);
   setBlocks([...editor.getBlocks()]);
@@ -40,6 +45,10 @@ export default function EditorComponent() {
    editor.moveFocusUp(currLevel, inputRefs);
   } else if (event.key === "ArrowDown") {
    editor.moveFocusDown(currLevel, inputRefs);
+  } else if (event.key === "/") {
+   setShowPopup(true);
+   setPopupTerm("");
+   setActiveBlockIndex(currLevel);
   }
  };
 
@@ -54,19 +63,21 @@ export default function EditorComponent() {
 
  return (
   <div>
-   {blocks.map((block, index) => (
-    <div
-     key={block.level}
-     ref={(el) => (inputRefs.current[index] = el)}
-     contentEditable
-     suppressContentEditableWarning={true}
-     // value={block.data.text}
-     // onInput={(e) => updateBlock(block.level, e)}
-     onKeyDown={(e) => handleKeyDown(e, block.level)}
-    >
-     {block.data.text}
-    </div>
-   ))}
+   {blocks.map((block, index) => {
+    return (
+     <div
+      key={block.level}
+      ref={(el) => (inputRefs.current[index] = el)}
+      contentEditable
+      suppressContentEditableWarning={true}
+      // value={block.data.text}
+      // onInput={(e) => updateBlock(block.level, e)}
+      onKeyDown={(e) => handleKeyDown(e, block.level)}
+     >
+      {block.data.text}
+     </div>
+    );
+   })}
    <button onClick={() => addBlock()}>Add Block</button>
   </div>
  );
