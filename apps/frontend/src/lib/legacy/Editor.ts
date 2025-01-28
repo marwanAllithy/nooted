@@ -9,7 +9,8 @@ export class Editor {
   this.blocks = [];
  }
 
- addBlock(type: BlockType, text: string, currLevel: number) {
+ // TODO: add back the BlockType Enum
+ addBlock(type: string, text: string, currLevel: number) {
   const id = this.blocks.length;
   const newBlock = new Block(id, type, text);
   this.blocks.push(newBlock);

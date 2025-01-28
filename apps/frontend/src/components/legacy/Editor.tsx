@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Editor } from "@/lib/Editor";
-import { Block } from "@/lib/Block";
+import { Editor } from "@/lib/legacy/Editor";
+import { Block } from "@/lib/legacy/Block";
 
 const editor = new Editor();
 
@@ -20,16 +20,16 @@ export default function EditorComponent() {
  };
 
  // Update block
- const updateBlock = (
-  currLevel: number,
-  e: React.FormEvent<HTMLDivElement>
- ) => {
-  const text = e.currentTarget.innerText;
-  editor.updateBlock(currLevel, text);
-  setBlocks([...editor.getBlocks()]);
+ // const updateBlock = (
+ //  currLevel: number,
+ //  e: React.FormEvent<HTMLDivElement>
+ // ) => {
+ //  const text = e.currentTarget.innerText;
+ //  editor.updateBlock(currLevel, text);
+ //  setBlocks([...editor.getBlocks()]);
 
-  console.log(blocks);
- };
+ //  console.log(blocks);
+ // };
 
  // key events
  const handleKeyDown = (
@@ -64,10 +64,14 @@ export default function EditorComponent() {
  return (
   <div>
    {blocks.map((block, index) => {
+    const [dropdown, setDropdown] = useState(false);
+
     return (
      <div
       key={block.level}
-      ref={(el) => (inputRefs.current[index] = el)}
+      ref={(el) => {
+       inputRefs.current[index] = el;
+      }}
       contentEditable
       suppressContentEditableWarning={true}
       // value={block.data.text}
