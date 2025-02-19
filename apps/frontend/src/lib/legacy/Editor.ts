@@ -10,10 +10,30 @@ export class Editor {
  }
 
  // TODO: add back the BlockType Enum
- addBlock(type: string, text: string, currLevel: number) {
+ addBlock(
+  blocks: any,
+  setBlocks: any,
+  type: string,
+  text: string,
+  currLevel: number
+ ) {
+  const updatedBlocks = [];
+
+  console.log("Adding block", type, text, currLevel);
+
+  const firstHalf = blocks.slice(0, currLevel + 1);
+  const secondHalf = blocks.slice(currLevel + 1);
+
+  console.log("halves: ", firstHalf, secondHalf);
+
   const id = this.blocks.length;
   const newBlock = new Block(id, type, text);
-  this.blocks.push(newBlock);
+
+  // TODO: use current level to input the new block in it's correct place
+
+  // this.blocks.push(newBlock);
+
+  setBlocks([...firstHalf, newBlock, ...secondHalf]);
  }
 
  updateBlock(currLevel: number, text: string) {
@@ -23,11 +43,7 @@ export class Editor {
   }
  }
 
- moveFocusUp(
-  currLevel: number,
-  // inputRefs: React.RefObject<(HTMLDivElement | null)[]>
-  inputRefs: any
- ) {
+ moveFocusUp(currLevel: number, inputRefs: any) {
   const index = this.blocks.findIndex((block) => block.level === currLevel);
   if (index > 0) {
    inputRefs?.current[index - 1]?.focus();

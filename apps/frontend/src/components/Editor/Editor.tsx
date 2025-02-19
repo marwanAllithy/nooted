@@ -1,11 +1,37 @@
+"use client";
+
 import React, { useState, useRef, useEffect } from "react";
 import { Editor } from "@/lib/legacy/Editor";
 import { Block } from "@/lib/legacy/Block";
 
+const d = [
+ {
+  level: 0,
+  type: "TEXT",
+  data: { text: "" },
+ },
+ {
+  level: 1,
+  type: "TEXT",
+  data: { text: "" },
+ },
+ {
+  level: 2,
+  type: "TEXT",
+  data: { text: "" },
+ },
+ {
+  level: 3,
+  type: "TEXT",
+  data: { text: "" },
+ },
+];
+
 const editor = new Editor();
 
 export default function EditorComponent() {
- const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
+ // const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
+ const [blocks, setBlocks] = useState<Block[]>(d);
  const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
 
  // pop up  state
@@ -14,12 +40,12 @@ export default function EditorComponent() {
  const [activeBlockIndex, setActiveBlockIndex] = useState<number | null>(null);
 
  const addBlock = (currLevel: number) => {
-  editor.addBlock("text", "", currLevel);
+  editor.addBlock(blocks, setBlocks, "text", "", currLevel);
   setBlocks([...editor.getBlocks()]);
   console.log(blocks);
  };
-
  // Update block
+
  // const updateBlock = (
  //  currLevel: number,
  //  e: React.FormEvent<HTMLDivElement>
@@ -53,19 +79,20 @@ export default function EditorComponent() {
  };
 
  // Save blocks every 10 seconds
- useEffect(() => {
-  const intervalId = setInterval(() => {
-   console.log("Saving blocks:", editor.getBlocks());
-  }, 10000);
+ // useEffect(() => {
+ //  // TODO: major bug
+ //  const intervalId = setInterval(() => {
+ //   console.log("Saving blocks:", editor.getBlocks());
+ //  }, 10000);
 
-  return () => clearInterval(intervalId);
- }, []);
+ //  return () => clearInterval(intervalId);
+ // }, []);
 
  return (
   <div>
    {blocks.map((block, index) => {
-    const [dropdown, setDropdown] = useState(false);
-
+    // const [dropdown, setDropdown] = useState(false);
+    let dropdown;
     return (
      <div
       key={block.level}

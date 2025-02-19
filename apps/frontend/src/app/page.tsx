@@ -1,12 +1,6 @@
 "use client";
 
-import EditorComponent from "@/components/Editor";
-import Image, { type ImageProps } from "next/image";
-
-type Props = Omit<ImageProps, "src"> & {
- srcLight: string;
- srcDark: string;
-};
+import EditorComponent from "@/components/Editor/Editor";
 
 export default function Home() {
  return (
