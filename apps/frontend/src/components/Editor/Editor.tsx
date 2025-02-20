@@ -1,28 +1,29 @@
 "use client";
 
+import Block from "@/lib/Editor/Block";
+import Editor from "@/lib/Editor/Editor";
+import { BlockType } from "@/types/editor";
 import React, { useState, useRef, useEffect } from "react";
-import { Editor } from "@/lib/legacy/Editor";
-import { Block } from "@/lib/legacy/Block";
 
 const d = [
  {
   level: 0,
-  type: "TEXT",
+  type: BlockType.TEXT,
   data: { text: "" },
  },
  {
   level: 1,
-  type: "TEXT",
+  type: BlockType.TEXT,
   data: { text: "" },
  },
  {
   level: 2,
-  type: "TEXT",
+  type: BlockType.TEXT,
   data: { text: "" },
  },
  {
   level: 3,
-  type: "TEXT",
+  type: BlockType.TEXT,
   data: { text: "" },
  },
 ];
@@ -40,7 +41,7 @@ export default function EditorComponent() {
  const [activeBlockIndex, setActiveBlockIndex] = useState<number | null>(null);
 
  const addBlock = (currLevel: number) => {
-  editor.addBlock(blocks, setBlocks, "text", "", currLevel);
+  editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
   setBlocks([...editor.getBlocks()]);
   console.log(blocks);
  };
@@ -66,7 +67,7 @@ export default function EditorComponent() {
 
   if (event.key === "Enter") {
    event.preventDefault();
-   addBlock(currLevel);
+   editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
   } else if (event.key === "ArrowUp") {
    editor.moveFocusUp(currLevel, inputRefs);
   } else if (event.key === "ArrowDown") {
@@ -109,7 +110,7 @@ export default function EditorComponent() {
      </div>
     );
    })}
-   <button onClick={() => addBlock()}>Add Block</button>
+   <button>Add Block</button>
   </div>
  );
 }
