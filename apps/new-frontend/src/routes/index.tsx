@@ -1,13 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import EditorComponent from "@/components/Editor/Editor";
 
-export const Route = createFileRoute('/')({
-  component: Home,
-})
+export const Route = createFileRoute("/")({
+  component: App,
+});
 
-function Home() {
+function App() {
   return (
-    <div className="p-2">
-      <h3>Druda, I am empressed. </h3>
+    <div className="p-6">
+      <EditorComponent />
     </div>
-  )
+  );
 }
