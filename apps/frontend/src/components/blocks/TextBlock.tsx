@@ -1,73 +1,52 @@
-import React, { useState, useRef, useEffect } from "react";
-import { autoCompleteData } from "@/constants";
-import AutoCompleteDropDown from "../AutoCompleteDropDown";
+import React from "react";
+import type Block from "@/lib/Editor/Block";
+import { Card } from "../ui/card";
 
 interface Props {
- handleKeyDown: (event: any) => void;
- inputRef: (el: any) => void;
- text: string;
+  //   blocks: Block[];
+  //   setBlocks: any;
+  //   blockType: BlockType;
+  block: Block;
+  index: number;
+  inputRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
+  handleKeyDown: any;
+  showAutoComplete: boolean;
+  filteredTerms: any;
 }
 
-export default function TextBlock({ handleKeyDown, inputRef, text }: Props) {
- const [showPopup, setShowPopup] = useState(false);
- const [isFocused, setIsFocused] = useState(true);
- const divRef = useRef<any>(null);
-
- useEffect(() => {
-  const handleKeyPress = (event: KeyboardEvent) => {
-   if (event.key === "/" && isFocused) {
-    setShowPopup(true);
-    divRef.current.focus();
-   }
-  };
-
-  const handleFocus = () => {
-   setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-   setIsFocused(false);
-   setShowPopup(false);
-  };
-
-  const divElement = divRef.current;
-  if (divElement) {
-   divElement.addEventListener("keypress", handleKeyPress);
-   // divElement.addEventListener("focus", handleFocus);
-   // divElement.addEventListener("blur", handleBlur);
-  }
-
-  return () => {
-   if (divElement) {
-    divElement.removeEventListener("keypress", handleKeyPress);
-    // divElement.removeEventListener("focus", handleFocus);
-    // divElement.removeEventListener("blur", handleBlur);
-   }
-  };
- }, [isFocused]);
-
- useEffect(() => {
-  if (divRef.current) {
-   divRef.current.innerText = text;
-  }
- }, [text]);
-
- return (
-  <div>
-   <div
-    onKeyDown={handleKeyDown}
-    ref={(el: any) => {
-     inputRef(el);
-     divRef.current = el;
-    }}
-    suppressContentEditableWarning={true}
-    contentEditable
-   >
-    {text}
-   </div>
-   {showPopup && (
-    <AutoCompleteDropDown autoCompleteWords={autoCompleteData} term="" />
-   )}
-  </div>
- );
+export default function TextBlock({
+  block,
+  inputRefs,
+  handleKeyDown,
+  index,
+  showAutoComplete,
+  filteredTerms,
+}: Props) {
+  return (
+    <div className="relative ">
+      <div
+        key={block?.level}
+        ref={(el) => {
+          inputRefs.current[index] = el;
+        }}
+        contentEditable
+        suppressContentEditableWarning={true}
+        onKeyDown={(e) => handleKeyDown(e, block.level)}
+      >
+        {block.data.text}
+      </div>
+      {showAutoComplete && (
+        <Card className="absolute top-6 p-6">
+          {filteredTerms.map(
+            (terms: { title: string; description: string }) => (
+              <div className="p-2">
+                <h4>{terms.title}</h4>
+                <p>{terms.description}</p>
+              </div>
+            )
+          )}
+        </Card>
+      )}
+    </div>
+  );
 }
