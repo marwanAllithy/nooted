@@ -1,5 +1,5 @@
 const autoCompleteTerms = [
-  {
+ {
     title: "text",
     description: "Text block",
   },

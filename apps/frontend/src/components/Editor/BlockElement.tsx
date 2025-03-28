@@ -1,8 +1,16 @@
 import Block from "@/lib/Editor/Block";
-import { BlockType } from "@/types/editor";
 import React, { useState } from "react";
 import { autoCompleteTerms } from "@/constants";
-import { TextBlock } from "../blocks";
+import { BlockType } from "@/types/editor";
+import {
+  TextBlock,
+  Header1,
+  Header2,
+  Header3,
+  // Header4,
+  // Header5,
+  // Header6,
+} from "../blocks";
 
 type Props = {
   blocks: Block[];
@@ -11,13 +19,13 @@ type Props = {
   index: number;
   inputRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
   editor: any;
-  blockType: BlockType;
+  currBlockType: BlockType;
 };
 
 export default function BlockElement({
   blocks,
   block,
-  blockType,
+  currBlockType,
   setBlocks,
   index,
   inputRefs,
@@ -29,7 +37,7 @@ export default function BlockElement({
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    currLevel: number
+    currLevel: number,
   ) => {
     console.log(event.key, currLevel);
     switch (event.key) {
@@ -54,16 +62,16 @@ export default function BlockElement({
         // TODO: bug here will only be fixed ones the saving system is in place.
         console.log("split", inputRefs.current[index]?.innerText.split("/"));
         setSearchTerm(
-          inputRefs.current[index]?.innerText.split("/")[1] as string
+          inputRefs.current[index]?.innerText.split("/")[1] as string,
         );
 
         if (showAutoComplete) {
           setFilteredTerms(
             autoCompleteTerms
               .filter((item) =>
-                item.title.toLowerCase().includes(searchTerm.toLowerCase())
+                item.title.toLowerCase().includes(searchTerm.toLowerCase()),
               )
-              .slice(0, 3)
+              .slice(0, 3),
           );
         }
 
@@ -72,8 +80,8 @@ export default function BlockElement({
   };
 
   // TODO: add change block feature
-  switch (block?.type) {
-    case blockType.TEXT:
+  switch (currBlockType) {
+    case BlockType.TEXT:
       return (
         <TextBlock
           handleKeyDown={handleKeyDown}
@@ -84,19 +92,51 @@ export default function BlockElement({
           filteredTerms={filteredTerms}
         />
       );
-      break;
+    case BlockType.H1:
+      return (
+        <Header1
+          handleKeyDown={handleKeyDown}
+          block={block}
+          inputRefs={inputRefs}
+          index={index}
+          showAutoComplete={showAutoComplete}
+          filteredTerms={filteredTerms}
+        />
+      );
+    case BlockType.H2:
+      return (
+        <Header2
+          handleKeyDown={handleKeyDown}
+          block={block}
+          inputRefs={inputRefs}
+          index={index}
+          showAutoComplete={showAutoComplete}
+          filteredTerms={filteredTerms}
+        />
+      );
+    case BlockType.H3:
+      return (
+        <Header3
+          handleKeyDown={handleKeyDown}
+          block={block}
+          inputRefs={inputRefs}
+          index={index}
+          showAutoComplete={showAutoComplete}
+          filteredTerms={filteredTerms}
+        />
+      );
 
-    default:
-      return (
-        <TextBlock
-          handleKeyDown={handleKeyDown}
-          block={block}
-          inputRefs={inputRefs}
-          index={index}
-          showAutoComplete={showAutoComplete}
-          filteredTerms={filteredTerms}
-        />
-      );
-      break;
+    // default:
+    //   return (
+    //     <TextBlock
+    //       handleKeyDown={handleKeyDown}
+    //       block={block}
+    //       inputRefs={inputRefs}
+    //       index={index}
+    //       showAutoComplete={showAutoComplete}
+    //       filteredTerms={filteredTerms}
+    //     />
+    //   );
+    // break;
   }
 }

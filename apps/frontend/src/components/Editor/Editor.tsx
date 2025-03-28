@@ -25,21 +25,21 @@ const d = [
     type: BlockType.H3,
     data: { text: "" },
   },
-  {
-    level: 3,
-    type: BlockType.H4,
-    data: { text: "" },
-  },
-  {
-    level: 3,
-    type: BlockType.H5,
-    data: { text: "" },
-  },
-  {
-    level: 3,
-    type: BlockType.H6,
-    data: { text: "" },
-  },
+  // {
+  //   level: 3,
+  //   type: BlockType.H4,
+  //   data: { text: "" },
+  // },
+  // {
+  //   level: 3,
+  //   type: BlockType.H5,
+  //   data: { text: "" },
+  // },
+  // {
+  //   level: 3,
+  //   type: BlockType.H6,
+  //   data: { text: "" },
+  // },
 ];
 
 const editor = new Editor();
@@ -65,7 +65,7 @@ export default function EditorComponent() {
         <BlockElement
           blocks={blocks}
           block={block}
-          blockType={block.type}
+          currBlockType={block.type}
           setBlocks={setBlocks}
           index={index}
           inputRefs={inputRefs}

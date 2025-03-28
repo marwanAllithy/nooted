@@ -1,5 +1,3 @@
-import React from "react";
-
 type Props = {
   autoCompleteWords: { title: string; description: string }[];
   term: string;
