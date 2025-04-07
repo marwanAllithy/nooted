@@ -25,6 +25,7 @@ export default function Header3({
   return (
     <div className="relative">
       <h3
+        className="p-2 text-4xl font-bold"
         key={block?.level}
         ref={(el) => {
           inputRefs.current[index] = el;

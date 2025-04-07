@@ -63,10 +63,10 @@ export default function EditorComponent() {
     <div>
       {blocks.map((block, index) => (
         <BlockElement
+          setBlocks={setBlocks}
           blocks={blocks}
           block={block}
           currBlockType={block.type}
-          setBlocks={setBlocks}
           index={index}
           inputRefs={inputRefs}
           editor={editor}

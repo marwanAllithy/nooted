@@ -1,5 +1,5 @@
 import Block from "@/lib/Editor/Block";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { autoCompleteTerms } from "@/constants";
 import { BlockType } from "@/types/editor";
 import {
@@ -11,6 +11,7 @@ import {
   // Header5,
   // Header6,
 } from "../blocks";
+import { getCaretPosition } from "@/lib/utils";
 
 type Props = {
   blocks: Block[];
@@ -23,10 +24,10 @@ type Props = {
 };
 
 export default function BlockElement({
+  setBlocks,
   blocks,
   block,
   currBlockType,
-  setBlocks,
   index,
   inputRefs,
   editor,
@@ -39,31 +40,46 @@ export default function BlockElement({
     event: React.KeyboardEvent<HTMLDivElement>,
     currLevel: number,
   ) => {
+    const currentInputText = inputRefs.current[index]?.innerText;
     console.log(event.key, currLevel);
+
     switch (event.key) {
       case "Enter":
+        const cursorPosition = getCaretPosition(inputRefs.current[index]);
+
+        // TODO split string on enter
+        const inputFirstHalf =
+          cursorPosition != 0
+            ? currentInputText?.slice(0, cursorPosition)
+            : (currentInputText as string);
+
+        console.log("cursorPosition", cursorPosition);
         event.preventDefault();
         setShowAutoComplete(false);
         editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
         break;
+
       case "ArrowUp":
         setShowAutoComplete(false);
         editor.moveFocusUp(currLevel, inputRefs);
         break;
+
       case "ArrowDown":
         setShowAutoComplete(false);
         editor.moveFocusDown(currLevel, inputRefs);
         break;
+
       case "/":
         setShowAutoComplete(true);
-        console.log(inputRefs.current[index]?.innerText);
+        console.log(currentInputText);
         break;
       default:
+        // save edits
+        blocks[currLevel].data.text = currentInputText as string;
+        setBlocks(blocks);
+
         // TODO: bug here will only be fixed ones the saving system is in place.
-        console.log("split", inputRefs.current[index]?.innerText.split("/"));
-        setSearchTerm(
-          inputRefs.current[index]?.innerText.split("/")[1] as string,
-        );
+        setSearchTerm(currentInputText?.split("/")[1] as string);
 
         if (showAutoComplete) {
           setFilteredTerms(
@@ -78,6 +94,10 @@ export default function BlockElement({
         break;
     }
   };
+
+  useEffect(() => {
+    setBlocks(blocks);
+  }, [block, blocks, setBlocks, inputRefs]);
 
   // TODO: add change block feature
   switch (currBlockType) {
