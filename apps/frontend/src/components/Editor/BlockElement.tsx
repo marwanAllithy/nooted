@@ -45,18 +45,43 @@ export default function BlockElement({
 
     switch (event.key) {
       case "Enter":
+        event.preventDefault();
+
         const cursorPosition = getCaretPosition(inputRefs.current[index]);
 
-        // TODO split string on enter
-        const inputFirstHalf =
-          cursorPosition != 0
-            ? currentInputText?.slice(0, cursorPosition)
-            : (currentInputText as string);
+        if (cursorPosition != 0) {
+          // TODO: split string on enter
+          const inputFirstHalf =
+            cursorPosition != 0
+              ? currentInputText?.slice(0, cursorPosition)
+              : (currentInputText as string);
 
-        console.log("cursorPosition", cursorPosition);
-        event.preventDefault();
-        setShowAutoComplete(false);
-        editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
+          const inputSecondHalf =
+            cursorPosition != 0
+              ? currentInputText?.slice(cursorPosition)
+              : (currentInputText as string);
+
+          console.log("cursorPosition", cursorPosition);
+
+          console.log("input halfs", inputFirstHalf, inputSecondHalf);
+          setShowAutoComplete(false);
+          // change the current block
+
+          blocks[currLevel].data.text = inputFirstHalf as string;
+
+          editor.addBlock(
+            blocks,
+            setBlocks,
+            BlockType.TEXT,
+            inputSecondHalf as string,
+            currLevel,
+          );
+        } else {
+          editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
+        }
+        
+
+        // setBlocks(blocks);
         break;
 
       case "ArrowUp":
