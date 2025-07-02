@@ -25,6 +25,21 @@ const d = [
     type: BlockType.H3,
     data: { text: "" },
   },
+  {
+    level: 4,
+    type: BlockType.TEXT,
+    data: { text: "" },
+  },
+  {
+    level: 5,
+    type: BlockType.TEXT,
+    data: { text: "" },
+  },
+  {
+    level: 6,
+    type: BlockType.TEXT,
+    data: { text: "" },
+  },
   // {
   //   level: 3,
   //   type: BlockType.H4,

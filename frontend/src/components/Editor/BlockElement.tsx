@@ -49,7 +49,16 @@ export default function BlockElement({
 
         const cursorPosition = getCaretPosition(inputRefs.current[index]);
 
-        if (cursorPosition != 0) {
+        if (currentInputText && cursorPosition == 0) {
+          blocks[currLevel].data.text = "";
+          editor.addBlock(
+            blocks,
+            setBlocks,
+            BlockType.TEXT,
+            currentInputText as string,
+            currLevel,
+          );
+        } else if (cursorPosition != 0) {
           // TODO: split string on enter
           const inputFirstHalf =
             cursorPosition != 0
@@ -79,7 +88,9 @@ export default function BlockElement({
         } else {
           editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
         }
-        
+        setTimeout(() => {
+          inputRefs?.current[currLevel + 1]?.focus();
+        }, 0);
 
         // setBlocks(blocks);
         break;
