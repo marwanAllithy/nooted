@@ -12,6 +12,7 @@ import {
   // Header6,
 } from "../blocks";
 import { getCaretPosition } from "@/lib/utils";
+import { onEnter } from "@/lib/Editor/keypress";
 
 type Props = {
   blocks: Block[];
@@ -40,58 +41,22 @@ export default function BlockElement({
     event: React.KeyboardEvent<HTMLDivElement>,
     currLevel: number,
   ) => {
-    const currentInputText = inputRefs.current[index]?.innerText;
+    const currentInputText = inputRefs.current[index]?.innerText as string;
     console.log(event.key, currLevel);
 
     switch (event.key) {
       case "Enter":
         event.preventDefault();
-
-        const cursorPosition = getCaretPosition(inputRefs.current[index]);
-
-        if (currentInputText && cursorPosition == 0) {
-          blocks[currLevel].data.text = "";
-          editor.addBlock(
-            blocks,
-            setBlocks,
-            BlockType.TEXT,
-            currentInputText as string,
-            currLevel,
-          );
-        } else if (cursorPosition != 0) {
-          // TODO: split string on enter
-          const inputFirstHalf =
-            cursorPosition != 0
-              ? currentInputText?.slice(0, cursorPosition)
-              : (currentInputText as string);
-
-          const inputSecondHalf =
-            cursorPosition != 0
-              ? currentInputText?.slice(cursorPosition)
-              : (currentInputText as string);
-
-          console.log("cursorPosition", cursorPosition);
-
-          console.log("input halfs", inputFirstHalf, inputSecondHalf);
-          setShowAutoComplete(false);
-          // change the current block
-
-          blocks[currLevel].data.text = inputFirstHalf as string;
-
-          editor.addBlock(
-            blocks,
-            setBlocks,
-            BlockType.TEXT,
-            inputSecondHalf as string,
-            currLevel,
-          );
-        } else {
-          editor.addBlock(blocks, setBlocks, BlockType.TEXT, "", currLevel);
-        }
-        setTimeout(() => {
-          inputRefs?.current[currLevel + 1]?.focus();
-        }, 0);
-
+        onEnter({
+          currentInputText,
+          inputRefs,
+          index,
+          blocks,
+          setBlocks,
+          currLevel,
+          editor,
+          setShowAutoComplete,
+        });
         // setBlocks(blocks);
         break;
 
