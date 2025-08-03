@@ -2,17 +2,8 @@ import Block from "@/lib/Editor/Block";
 import React, { useEffect, useState } from "react";
 import { autoCompleteTerms } from "@/constants";
 import { BlockType } from "@/types/editor";
-import {
-  TextBlock,
-  Header1,
-  Header2,
-  Header3,
-  // Header4,
-  // Header5,
-  // Header6,
-} from "../blocks";
-import { getCaretPosition } from "@/lib/utils";
-import { onEnter } from "@/lib/Editor/keypress";
+import { InputTextBlock } from "../blocks";
+import { onDelete, onEnter } from "@/lib/Editor/keypress";
 
 type Props = {
   blocks: Block[];
@@ -74,6 +65,19 @@ export default function BlockElement({
         setShowAutoComplete(true);
         console.log(currentInputText);
         break;
+
+      case "Backspace":
+        event.preventDefault();
+        onDelete({
+          currentInputText,
+          inputRefs,
+          index,
+          blocks,
+          setBlocks,
+          currLevel,
+          editor,
+        });
+        break;
       default:
         // save edits
         blocks[currLevel].data.text = currentInputText as string;
@@ -104,46 +108,54 @@ export default function BlockElement({
   switch (currBlockType) {
     case BlockType.TEXT:
       return (
-        <TextBlock
+        <InputTextBlock
           handleKeyDown={handleKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
           showAutoComplete={showAutoComplete}
           filteredTerms={filteredTerms}
+          blockType={currBlockType}
+          className=""
         />
       );
     case BlockType.H1:
       return (
-        <Header1
+        <InputTextBlock
           handleKeyDown={handleKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
           showAutoComplete={showAutoComplete}
           filteredTerms={filteredTerms}
+          blockType={currBlockType}
+          className="p-2 text-6xl font-extrabold"
         />
       );
     case BlockType.H2:
       return (
-        <Header2
+        <InputTextBlock
           handleKeyDown={handleKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
           showAutoComplete={showAutoComplete}
           filteredTerms={filteredTerms}
+          blockType={currBlockType}
+          className="p-2 text-5xl font-bold"
         />
       );
     case BlockType.H3:
       return (
-        <Header3
+        <InputTextBlock
           handleKeyDown={handleKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
           showAutoComplete={showAutoComplete}
           filteredTerms={filteredTerms}
+          blockType={currBlockType}
+          className="p-2 text-4xl font-extrabold"
         />
       );
 

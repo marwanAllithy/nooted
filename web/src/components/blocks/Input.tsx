@@ -1,6 +1,8 @@
 import React from "react";
 import type Block from "@/lib/Editor/Block";
 import { Card } from "../ui/card";
+import type { BlockType } from "@/types/editor";
+import { cn } from "@/lib/utils";
 
 interface Props {
   //   blocks: Block[];
@@ -12,20 +14,23 @@ interface Props {
   handleKeyDown: any;
   showAutoComplete: boolean;
   filteredTerms: any;
+  blockType: BlockType;
+  className?: string;
 }
 
-export default function Header3({
+export default function InputTextBlock({
   block,
   inputRefs,
   handleKeyDown,
   index,
   showAutoComplete,
   filteredTerms,
+  blockType,
+  className = "",
 }: Props) {
   return (
     <div className="relative">
-      <h3
-        className="p-2 text-4xl font-bold"
+      <div
         key={block?.level}
         ref={(el) => {
           inputRefs.current[index] = el;
@@ -33,9 +38,18 @@ export default function Header3({
         contentEditable
         suppressContentEditableWarning={true}
         onKeyDown={(e) => handleKeyDown(e, block.level)}
+        className={cn(
+          "border-none ring-0 outline-none focus:ring-0 focus:outline-none",
+          className,
+        )}
+        style={{
+          fontFamily:
+            'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
+        }}
+        data-content-editable-leaf="true"
       >
         {block.data.text}
-      </h3>
+      </div>
       {showAutoComplete && (
         <Card className="absolute top-6 p-6">
           {filteredTerms.map(
