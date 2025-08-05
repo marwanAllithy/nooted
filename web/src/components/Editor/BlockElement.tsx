@@ -67,7 +67,7 @@ export default function BlockElement({
         break;
 
       case "Backspace":
-        event.preventDefault();
+        // event.preventDefault();
         onDelete({
           currentInputText,
           inputRefs,
@@ -82,6 +82,12 @@ export default function BlockElement({
         // save edits
         blocks[currLevel].data.text = currentInputText as string;
         setBlocks(blocks);
+        // editor.updateBlock(
+        //   blocks,
+        //   setBlocks,
+        //   currLevel,
+        //   currentInputText as string,
+        // );
 
         // TODO: bug here will only be fixed ones the saving system is in place.
         setSearchTerm(currentInputText?.split("/")[1] as string);

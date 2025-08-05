@@ -1,5 +1,5 @@
 import { BlockType } from "@/types/editor";
-import { getCaretPosition } from "../utils";
+import { getCaretPosition, sanitize } from "../utils";
 import type Block from "./Block";
 
 type OnEnterTypes = {
@@ -31,7 +31,7 @@ export function onEnter({
       blocks,
       setBlocks,
       BlockType.TEXT,
-      currentInputText as string,
+      sanitize(currentInputText) as string,
       currLevel,
     );
   } else if (cursorPosition != 0) {
@@ -84,65 +84,24 @@ export function onDelete({
   index,
   blocks,
   setBlocks,
-  currLevel,
   editor,
+  currLevel,
 }: onDeleteProps) {
-  // const caretPos = getCaretPosition(inputRefs.current[index]);
+  const text = sanitize(currentInputText) as string;
+  const cursorPosition = getCaretPosition(inputRefs.current[index]);
 
-  // // If input is empty, delete the block and move focus up
-  // if (!currentInputText || currentInputText.length === 0) {
-  //   if (blocks.length <= 1) return; // Don't delete the last block
-  //   const newBlocks = blocks.filter((_, i) => i !== currLevel);
-  //   setBlocks(newBlocks);
-  //   setTimeout(() => {
-  //     inputRefs.current[currLevel - 1]?.focus();
-  //   }, 0);
-  //   return;
-  // }
+  // Remove the corresponding ref
 
-  // // If there is text behind the cursor, delete one character normally
-  // if (caretPos > 0) {
-  //   const newText =
-  //     currentInputText.slice(0, caretPos - 1) +
-  //     currentInputText.slice(caretPos);
-  //   blocks[currLevel].data.text = newText;
-  //   setBlocks([...blocks]);
-  //   setTimeout(() => {
-  //     // Restore caret position
-  //     const el = inputRefs.current[currLevel];
-  //     if (el) {
-  //       const range = document.createRange();
-  //       const sel = window.getSelection();
-  //       range.setStart(el.firstChild || el, caretPos - 1);
-  //       range.collapse(true);
-  //       sel?.removeAllRanges();
-  //       sel?.addRange(range);
-  //     }
-  //   }, 0);
-  //   return;
-  // }
+  console.log("onDelete", text, cursorPosition, blocks);
 
-  // // If no text behind, but text in front, merge with block above
-  // if (caretPos === 0 && currentInputText.length > 0 && currLevel > 0) {
-  //   const prevBlock = blocks[currLevel - 1];
-  //   const prevText = prevBlock.data.text || "";
-  //   prevBlock.data.text = prevText + currentInputText;
-  //   const newBlocks = blocks.filter((_, i) => i !== currLevel);
-  //   setBlocks(newBlocks);
-  //   setTimeout(() => {
-  //     inputRefs.current[currLevel - 1]?.focus();
-  //     // Optionally, move caret to end of previous block
-  //     const el = inputRefs.current[currLevel - 1];
-  //     if (el) {
-  //       const range = document.createRange();
-  //       const sel = window.getSelection();
-  //       const len = prevBlock.data.text.length;
-  //       range.setStart(el.firstChild || el, len);
-  //       range.collapse(true);
-  //       sel?.removeAllRanges();
-  //       sel?.addRange(range);
-  //     }
-  //   }, 0);
-  //   return;
-  // }
+  if (currLevel === 0) {
+    // inputRefs?.current[currLevel - 1]?.focus();
+  } else if (cursorPosition === 0 && text === "") {
+    // delete the block
+    editor.deleteBlock(blocks, setBlocks, currLevel);
+
+    // inputRefs.current.splice(currLevel, 1);
+
+    inputRefs?.current[currLevel - 1]?.focus();
+  }
 }

@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function sanitize(str: string) {
+  return str.replace(/[\n\r]+$/g, "").replace(/^\s+|\s+$/g, "");
+}
+
 export function getCaretPosition(editableDiv: HTMLDivElement | null): number {
   if (!editableDiv) return 0;
   let caretPos = 0;

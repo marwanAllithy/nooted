@@ -1,67 +1,13 @@
 import Block from "@/lib/Editor/Block";
 import Editor from "@/lib/Editor/Editor";
-import { BlockType } from "@/types/editor";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import BlockElement from "./BlockElement";
-
-const d = [
-  {
-    level: 0,
-    type: BlockType.TEXT,
-    data: { text: "" },
-  },
-  {
-    level: 1,
-    type: BlockType.H1,
-    data: { text: "" },
-  },
-  {
-    level: 2,
-    type: BlockType.H2,
-    data: { text: "" },
-  },
-  {
-    level: 3,
-    type: BlockType.H3,
-    data: { text: "" },
-  },
-  {
-    level: 4,
-    type: BlockType.TEXT,
-    data: { text: "" },
-  },
-  {
-    level: 5,
-    type: BlockType.TEXT,
-    data: { text: "" },
-  },
-  {
-    level: 6,
-    type: BlockType.TEXT,
-    data: { text: "" },
-  },
-  // {
-  //   level: 3,
-  //   type: BlockType.H4,
-  //   data: { text: "" },
-  // },
-  // {
-  //   level: 3,
-  //   type: BlockType.H5,
-  //   data: { text: "" },
-  // },
-  // {
-  //   level: 3,
-  //   type: BlockType.H6,
-  //   data: { text: "" },
-  // },
-];
 
 const editor = new Editor();
 
 export default function EditorComponent() {
   // const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
-  const [blocks, setBlocks] = useState<Block[]>(d);
+  const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
   const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   // Save blocks every 10 seconds
@@ -74,8 +20,22 @@ export default function EditorComponent() {
   //  return () => clearInterval(intervalId);
   // }, []);
 
+  useEffect(() => {
+    if (inputRefs.current.length !== blocks.length) {
+      inputRefs.current = Array(blocks.length)
+        .fill(null)
+        .map((_, i) => inputRefs.current[i] || null);
+    }
+  }, [blocks.length]);
+
+  useEffect(() => {
+    if (inputRefs.current[0]) {
+      inputRefs.current[0].focus();
+    }
+  }, []); // Run once on mount
+
   return (
-    <div>
+    <div id="editor">
       {blocks.map((block, index) => (
         <BlockElement
           setBlocks={setBlocks}
@@ -87,7 +47,6 @@ export default function EditorComponent() {
           editor={editor}
         />
       ))}
-      <button>Add Block</button>
     </div>
   );
 }
