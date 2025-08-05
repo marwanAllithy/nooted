@@ -1,5 +1,5 @@
 import { BlockType } from "@/types/editor";
-import { getCaretPosition, sanitize } from "../utils";
+import { getCaretPosition, sanitize, setCaretPosition } from "../utils";
 import type Block from "./Block";
 
 type OnEnterTypes = {
@@ -103,9 +103,16 @@ export function onDelete({
     inputRefs?.current[currLevel - 1]?.focus();
   } else if (cursorPosition === 0 && text !== "") {
     // add the remaining text to the block before
+    const prevBlockLength = blocks[currLevel - 1].data.text.length;
     blocks[currLevel - 1].data.text += text;
     blocks[currLevel].data.text = "";
+
+    console.log("prevBlockLength", prevBlockLength);
     editor.deleteBlock(blocks, setBlocks, currLevel);
-    inputRefs?.current[currLevel - 1]?.focus();
+
+    setTimeout(() => {
+      inputRefs?.current[currLevel - 1]?.focus();
+      setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
+    }, 0);
   }
 }

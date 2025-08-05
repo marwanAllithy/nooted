@@ -1,6 +1,6 @@
 import React from "react";
 import type Block from "@/lib/Editor/Block";
-import { Card } from "../ui/card";
+// import { Card } from "../ui/card";
 import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
 
@@ -23,9 +23,9 @@ export default function InputTextBlock({
   inputRefs,
   handleKeyDown,
   index,
-  showAutoComplete,
-  filteredTerms,
-  blockType,
+  // showAutoComplete,
+  // filteredTerms,
+  // blockType,
   className = "",
 }: Props) {
   return (
