@@ -78,6 +78,8 @@ type onDeleteProps = {
   editor: any;
 };
 
+// TODO: preverse the cursor position
+
 export function onDelete({
   currentInputText,
   inputRefs,
@@ -95,13 +97,15 @@ export function onDelete({
   console.log("onDelete", text, cursorPosition, blocks);
 
   if (currLevel === 0) {
-    // inputRefs?.current[currLevel - 1]?.focus();
+    // do nothing
   } else if (cursorPosition === 0 && text === "") {
-    // delete the block
     editor.deleteBlock(blocks, setBlocks, currLevel);
-
-    // inputRefs.current.splice(currLevel, 1);
-
+    inputRefs?.current[currLevel - 1]?.focus();
+  } else if (cursorPosition === 0 && text !== "") {
+    // add the remaining text to the block before
+    blocks[currLevel - 1].data.text += text;
+    blocks[currLevel].data.text = "";
+    editor.deleteBlock(blocks, setBlocks, currLevel);
     inputRefs?.current[currLevel - 1]?.focus();
   }
 }

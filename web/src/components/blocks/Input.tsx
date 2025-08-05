@@ -50,7 +50,7 @@ export default function InputTextBlock({
       >
         {block.data.text}
       </div>
-      {showAutoComplete && (
+      {/* {showAutoComplete && (
         <Card className="absolute top-6 p-6">
           {filteredTerms.map(
             (terms: { title: string; description: string }) => (
@@ -61,7 +61,7 @@ export default function InputTextBlock({
             ),
           )}
         </Card>
-      )}
+      )} */}
     </div>
   );
 }

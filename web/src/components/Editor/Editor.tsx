@@ -16,7 +16,6 @@ export default function EditorComponent() {
   //  const intervalId = setInterval(() => {
   //   console.log("Saving blocks:", editor.getBlocks());
   //  }, 10000);
-
   //  return () => clearInterval(intervalId);
   // }, []);
 
