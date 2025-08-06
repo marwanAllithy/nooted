@@ -1,5 +1,6 @@
 import { BlockType } from "@/types/editor";
 import Block from "./Block";
+import { setCaretPosition } from "../utils";
 
 export default class Editor {
   blocks: Block[];
@@ -98,25 +99,30 @@ export default class Editor {
       updatedBlocks[currLevel].data.text = text as string;
       return updatedBlocks;
     });
-    // const block = this.blocks.find((block) => block.level === currLevel);
-    // if (block) {
-    // block.data.text = text;
-    // }
   }
 
   // Movements
 
-  moveFocusUp(currLevel: number, inputRefs: any) {
+  // TODO: Add right and left movements
+
+  moveFocusUp(currLevel: number, inputRefs: any, prevBlockLength: number = 0) {
     console.log("inputRefs", inputRefs);
     if (currLevel > 0) {
       inputRefs?.current[currLevel - 1]?.focus();
     }
   }
 
-  moveFocusDown(currLevel: number, inputRefs: any) {
+  moveFocusDown(
+    currLevel: number,
+    inputRefs: any,
+    prevBlockLength: number = 0,
+  ) {
     console.log("inputRefs", inputRefs);
     if (currLevel < inputRefs?.current.length - 1) {
-      inputRefs?.current[currLevel + 1]?.focus();
+      setTimeout(() => {
+        inputRefs?.current[currLevel + 1]?.focus();
+        setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
+      }, 0);
     }
   }
 

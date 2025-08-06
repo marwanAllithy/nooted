@@ -35,6 +35,9 @@ export default function BlockElement({
     const currentInputText = inputRefs.current[index]?.innerText as string;
     console.log(event.key, currLevel);
 
+    
+    const prevBlockLength = blocks[currLevel - 1].data.text.length;
+
     switch (event.key) {
       case "Enter":
         event.preventDefault();
@@ -53,12 +56,12 @@ export default function BlockElement({
 
       case "ArrowUp":
         setShowAutoComplete(false);
-        editor.moveFocusUp(currLevel, inputRefs);
+        editor.moveFocusUp(currLevel, inputRefs, prevBlockLength);
         break;
 
       case "ArrowDown":
         setShowAutoComplete(false);
-        editor.moveFocusDown(currLevel, inputRefs);
+        editor.moveFocusDown(currLevel, inputRefs, prevBlockLength);
         break;
 
       case "/":
