@@ -12,6 +12,14 @@ type Inputs = {
   editor: any;
 };
 
+const headerTypes = [
+  BlockType.H1,
+  BlockType.H2,
+  BlockType.H3,
+  BlockType.H4,
+  BlockType.H5,
+  BlockType.H6,
+];
 // TODO: move into editor class
 
 export function onEnter({
@@ -93,9 +101,8 @@ export function onDelete({
   const text = sanitize(currentInputText) as string;
   const cursorPosition = getCaretPosition(inputRefs.current[index]);
 
-  // Remove the corresponding ref
+  // Only downgrade header if cursor is at start
 
-  console.log("onDelete", text, cursorPosition, blocks);
 
   if (currLevel === 0) {
     // do nothing
@@ -126,19 +133,9 @@ export function onHeader({
   currLevel,
 }: Inputs) {
   const text = sanitize(currentInputText) as string;
-  // Match leading hashes (max 6) at the start of the block
   const match = text.match(/^(#{1,6})\s?/);
-  // if (match) {
   const hashCount: number = match?.[1]?.length ?? 0;
-  // Map hashCount to BlockType
-  const headerTypes = [
-    BlockType.H1,
-    BlockType.H2,
-    BlockType.H3,
-    BlockType.H4,
-    BlockType.H5,
-    BlockType.H6,
-  ];
+
   const newType = headerTypes[hashCount] || BlockType.H1;
   if (newType) {
     const newText = text.replace(/^(#{1,6})\s?/, "");
