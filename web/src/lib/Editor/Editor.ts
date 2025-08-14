@@ -105,23 +105,53 @@ export default class Editor {
 
   // TODO: Add right and left movements
 
-  moveFocusUp(currLevel: number, inputRefs: any, prevBlockLength: number = 0) {
+  moveFocusUp(
+    currLevel: number,
+    inputRefs: any,
+    prevBlockLength: number,
+    currCursorPosition: number,
+  ) {
     console.log("inputRefs", inputRefs);
+    console.log("cursor position", currCursorPosition);
     if (currLevel > 0) {
-      inputRefs?.current[currLevel - 1]?.focus();
+      setTimeout(() => {
+        // inputRefs?.current[currLevel - 1]?.focus();
+        if (prevBlockLength < currCursorPosition) {
+          console.log("prev lenth");
+          setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
+        } else {
+          console.log("cursor lenth");
+          setCaretPosition(
+            inputRefs.current[currLevel - 1],
+            currCursorPosition,
+          );
+        }
+      }, 0);
     }
   }
 
   moveFocusDown(
     currLevel: number,
     inputRefs: any,
-    prevBlockLength: number = 0,
+    nextBlockLength: number,
+    currCursorPosition: number,
   ) {
     console.log("inputRefs", inputRefs);
+    console.log("cursor position", currCursorPosition);
+
     if (currLevel < inputRefs?.current.length - 1) {
       setTimeout(() => {
         inputRefs?.current[currLevel + 1]?.focus();
-        setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
+        if (nextBlockLength < currCursorPosition) {
+          console.log("next lenth");
+          setCaretPosition(inputRefs.current[currLevel + 1], nextBlockLength);
+        } else {
+          console.log("cursor lenth");
+          setCaretPosition(
+            inputRefs.current[currLevel + 1],
+            currCursorPosition,
+          );
+        }
       }, 0);
     }
   }

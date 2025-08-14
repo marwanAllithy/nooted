@@ -13,6 +13,8 @@ type OnEnterTypes = {
   setShowAutoComplete: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
+// TODO: move into editor class
+
 export function onEnter({
   currentInputText,
   inputRefs,

@@ -4,6 +4,7 @@ import { autoCompleteTerms } from "@/constants";
 import { BlockType } from "@/types/editor";
 import { InputTextBlock } from "../blocks";
 import { onDelete, onEnter } from "@/lib/Editor/keypress";
+import { getCaretPosition } from "@/lib/utils";
 
 type Props = {
   blocks: Block[];
@@ -33,11 +34,13 @@ export default function BlockElement({
     currLevel: number,
   ) => {
     const currentInputText = inputRefs.current[index]?.innerText as string;
+
+    const prevBlockLength = blocks[currLevel - 1]?.data.text.length;
+    const nextBlockLength = blocks[currLevel + 1]?.data.text.length;
+
+    const currCursorPosition = getCaretPosition(inputRefs.current[index]);
+
     console.log(event.key, currLevel);
-
-    
-    const prevBlockLength = blocks[currLevel - 1].data.text.length;
-
     switch (event.key) {
       case "Enter":
         event.preventDefault();
@@ -55,13 +58,25 @@ export default function BlockElement({
         break;
 
       case "ArrowUp":
+        event.preventDefault();
         setShowAutoComplete(false);
-        editor.moveFocusUp(currLevel, inputRefs, prevBlockLength);
+        editor.moveFocusUp(
+          currLevel,
+          inputRefs,
+          prevBlockLength,
+          currCursorPosition,
+        );
         break;
 
       case "ArrowDown":
+        event.preventDefault();
         setShowAutoComplete(false);
-        editor.moveFocusDown(currLevel, inputRefs, prevBlockLength);
+        editor.moveFocusDown(
+          currLevel,
+          inputRefs,
+          nextBlockLength,
+          currCursorPosition,
+        );
         break;
 
       case "/":
