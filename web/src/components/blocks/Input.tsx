@@ -5,17 +5,13 @@ import type { BlockType } from "@/types/editor";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  //   blocks: Block[];
-  //   setBlocks: any;
-  //   blockType: BlockType;
   block: Block;
   index: number;
   inputRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
   handleKeyDown: any;
-  showAutoComplete: boolean;
-  filteredTerms: any;
   blockType: BlockType;
   className?: string;
+  //   blockType: BlockType;
 }
 
 export default function InputTextBlock({
@@ -23,8 +19,6 @@ export default function InputTextBlock({
   inputRefs,
   handleKeyDown,
   index,
-  // showAutoComplete,
-  // filteredTerms,
   // blockType,
   className = "",
 }: Props) {
@@ -42,10 +36,6 @@ export default function InputTextBlock({
           "border-none ring-0 outline-none focus:ring-0 focus:outline-none",
           className,
         )}
-        style={{
-          fontFamily:
-            'ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"',
-        }}
         data-content-editable-leaf="true"
       >
         {block.data.text}

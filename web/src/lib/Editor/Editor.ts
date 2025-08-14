@@ -77,7 +77,7 @@ export default class Editor {
     setBlocks([...firstHalf, newBlock, ...secondHalf]);
   }
 
-  deleteBlock(currBlocks: [Block], setBlocks: any, currLevel: number) {
+  deleteBlock(currBlocks: Block[], setBlocks: any, currLevel: number) {
     const firstHalf = currBlocks.slice(0, currLevel);
     const secondHalf = currBlocks.slice(currLevel + 1);
     secondHalf.forEach((block: any) => {
@@ -88,18 +88,26 @@ export default class Editor {
     console.log("blocks after delete", currBlocks);
   }
 
-  updateBlock(
-    blocks: Block[],
-    setBlocks: any,
-    currLevel: number,
-    text: string,
-  ) {
-    setBlocks(() => {
-      const updatedBlocks = [...blocks];
-      updatedBlocks[currLevel].data.text = text as string;
+  changeBlockType(setBlocks: any, currLevel: number, type: BlockType) {
+    setBlocks((prevBlocks: any) => {
+      const updatedBlocks = [...prevBlocks];
+      updatedBlocks[currLevel].type = type;
       return updatedBlocks;
     });
   }
+
+  // updateBlock(
+  //   blocks: Block[],
+  //   setBlocks: any,
+  //   currLevel: number,
+  //   text: string,
+  // ) {
+  //   setBlocks(() => {
+  //     const updatedBlocks = [...blocks];
+  //     updatedBlocks[currLevel].data.text = text as string;
+  //     return updatedBlocks;
+  //   });
+  // }
 
   // Movements
 

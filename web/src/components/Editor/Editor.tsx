@@ -6,18 +6,8 @@ import BlockElement from "./BlockElement";
 const editor = new Editor();
 
 export default function EditorComponent() {
-  // const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
   const [blocks, setBlocks] = useState<Block[]>(editor.getBlocks());
   const inputRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Save blocks every 10 seconds
-  // useEffect(() => {
-  //  // TODO: major bug
-  //  const intervalId = setInterval(() => {
-  //   console.log("Saving blocks:", editor.getBlocks());
-  //  }, 10000);
-  //  return () => clearInterval(intervalId);
-  // }, []);
 
   useEffect(() => {
     if (inputRefs.current.length !== blocks.length) {
@@ -25,13 +15,14 @@ export default function EditorComponent() {
         .fill(null)
         .map((_, i) => inputRefs.current[i] || null);
     }
-  }, [blocks.length]);
+  }, [blocks, setBlocks]);
 
   useEffect(() => {
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
-  }, []); // Run once on mount
+    setBlocks(blocks);
+  }, []);
 
   return (
     <div id="editor">

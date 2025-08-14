@@ -1,17 +1,15 @@
 import Block from "@/lib/Editor/Block";
-import React, { useEffect, useState } from "react";
-import { autoCompleteTerms } from "@/constants";
+import React, { useEffect } from "react";
 import { BlockType } from "@/types/editor";
 import { InputTextBlock } from "../blocks";
-import { onDelete, onEnter } from "@/lib/Editor/keypress";
-import { getCaretPosition } from "@/lib/utils";
+import handleKeyDown from "@/lib/Editor/keypress";
 
 type Props = {
   blocks: Block[];
   block: Block;
   setBlocks: any;
   index: number;
-  inputRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
+  inputRefs: React.RefObject<(HTMLDivElement | null)[]>;
   editor: any;
   currBlockType: BlockType;
 };
@@ -25,103 +23,19 @@ export default function BlockElement({
   inputRefs,
   editor,
 }: Props) {
-  const [showAutoComplete, setShowAutoComplete] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredTerms, setFilteredTerms] = useState<any>([]);
-
-  const handleKeyDown = (
+  const onKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
     currLevel: number,
   ) => {
-    const currentInputText = inputRefs.current[index]?.innerText as string;
-
-    const prevBlockLength = blocks[currLevel - 1]?.data.text.length;
-    const nextBlockLength = blocks[currLevel + 1]?.data.text.length;
-
-    const currCursorPosition = getCaretPosition(inputRefs.current[index]);
-
-    console.log(event.key, currLevel);
-    switch (event.key) {
-      case "Enter":
-        event.preventDefault();
-        onEnter({
-          currentInputText,
-          inputRefs,
-          index,
-          blocks,
-          setBlocks,
-          currLevel,
-          editor,
-          setShowAutoComplete,
-        });
-        // setBlocks(blocks);
-        break;
-
-      case "ArrowUp":
-        event.preventDefault();
-        setShowAutoComplete(false);
-        editor.moveFocusUp(
-          currLevel,
-          inputRefs,
-          prevBlockLength,
-          currCursorPosition,
-        );
-        break;
-
-      case "ArrowDown":
-        event.preventDefault();
-        setShowAutoComplete(false);
-        editor.moveFocusDown(
-          currLevel,
-          inputRefs,
-          nextBlockLength,
-          currCursorPosition,
-        );
-        break;
-
-      case "/":
-        setShowAutoComplete(true);
-        console.log(currentInputText);
-        break;
-
-      case "Backspace":
-        // event.preventDefault();
-        onDelete({
-          currentInputText,
-          inputRefs,
-          index,
-          blocks,
-          setBlocks,
-          currLevel,
-          editor,
-        });
-        break;
-      default:
-        // save edits
-        blocks[currLevel].data.text = currentInputText as string;
-        setBlocks(blocks);
-        // editor.updateBlock(
-        //   blocks,
-        //   setBlocks,
-        //   currLevel,
-        //   currentInputText as string,
-        // );
-
-        // TODO: bug here will only be fixed ones the saving system is in place.
-        setSearchTerm(currentInputText?.split("/")[1] as string);
-
-        if (showAutoComplete) {
-          setFilteredTerms(
-            autoCompleteTerms
-              .filter((item) =>
-                item.title.toLowerCase().includes(searchTerm.toLowerCase()),
-              )
-              .slice(0, 3),
-          );
-        }
-
-        break;
-    }
+    handleKeyDown({
+      blocks,
+      setBlocks,
+      event,
+      currLevel,
+      inputRefs,
+      index,
+      editor,
+    });
   };
 
   useEffect(() => {
@@ -133,12 +47,10 @@ export default function BlockElement({
     case BlockType.TEXT:
       return (
         <InputTextBlock
-          handleKeyDown={handleKeyDown}
+          handleKeyDown={onKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
-          showAutoComplete={showAutoComplete}
-          filteredTerms={filteredTerms}
           blockType={currBlockType}
           className=""
         />
@@ -146,12 +58,10 @@ export default function BlockElement({
     case BlockType.H1:
       return (
         <InputTextBlock
-          handleKeyDown={handleKeyDown}
+          handleKeyDown={onKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
-          showAutoComplete={showAutoComplete}
-          filteredTerms={filteredTerms}
           blockType={currBlockType}
           className="p-2 text-6xl font-extrabold"
         />
@@ -159,12 +69,10 @@ export default function BlockElement({
     case BlockType.H2:
       return (
         <InputTextBlock
-          handleKeyDown={handleKeyDown}
+          handleKeyDown={onKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
-          showAutoComplete={showAutoComplete}
-          filteredTerms={filteredTerms}
           blockType={currBlockType}
           className="p-2 text-5xl font-bold"
         />
@@ -172,28 +80,13 @@ export default function BlockElement({
     case BlockType.H3:
       return (
         <InputTextBlock
-          handleKeyDown={handleKeyDown}
+          handleKeyDown={onKeyDown}
           block={block}
           inputRefs={inputRefs}
           index={index}
-          showAutoComplete={showAutoComplete}
-          filteredTerms={filteredTerms}
           blockType={currBlockType}
           className="p-2 text-4xl font-extrabold"
         />
       );
-
-    // default:
-    //   return (
-    //     <TextBlock
-    //       handleKeyDown={handleKeyDown}
-    //       block={block}
-    //       inputRefs={inputRefs}
-    //       index={index}
-    //       showAutoComplete={showAutoComplete}
-    //       filteredTerms={filteredTerms}
-    //     />
-    //   );
-    // break;
   }
 }
