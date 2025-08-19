@@ -9,22 +9,22 @@ export default class Editor {
     this.blocks = [
       {
         level: 0,
-        type: BlockType.H1,
+        type: BlockType.TEXT,
         data: { text: "" },
       },
       {
         level: 1,
-        type: BlockType.H1,
+        type: BlockType.TEXT,
         data: { text: "" },
       },
       {
         level: 2,
-        type: BlockType.H2,
+        type: BlockType.TEXT,
         data: { text: "" },
       },
       {
         level: 3,
-        type: BlockType.H3,
+        type: BlockType.TEXT,
         data: { text: "" },
       },
       {
@@ -42,21 +42,6 @@ export default class Editor {
         type: BlockType.TEXT,
         data: { text: "" },
       },
-      // {
-      //   level: 3,
-      //   type: BlockType.H4,
-      //   data: { text: "" },
-      // },
-      // {
-      //   level: 3,
-      //   type: BlockType.H5,
-      //   data: { text: "" },
-      // },
-      // {
-      //   level: 3,
-      //   type: BlockType.H6,
-      //   data: { text: "" },
-      // },
     ];
   }
 

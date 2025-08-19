@@ -15,7 +15,7 @@ export default function EditorComponent() {
         .fill(null)
         .map((_, i) => inputRefs.current[i] || null);
     }
-  }, [blocks, setBlocks]);
+  }, [blocks, setBlocks, editor]);
 
   useEffect(() => {
     if (inputRefs.current[0]) {

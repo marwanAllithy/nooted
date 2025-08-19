@@ -30,7 +30,6 @@ export function onEnter({
   setBlocks,
   currLevel,
   editor,
-  // setShowAutoComplete,
 }: Inputs) {
   const cursorPosition = getCaretPosition(inputRefs.current[index]);
 
@@ -58,8 +57,6 @@ export function onEnter({
     console.log("cursorPosition", cursorPosition);
 
     console.log("input halfs", inputFirstHalf, inputSecondHalf);
-    // setShowAutoComplete(false);
-    // change the current block
 
     blocks[currLevel].data.text = inputFirstHalf as string;
 
@@ -77,15 +74,6 @@ export function onEnter({
     inputRefs?.current[currLevel + 1]?.focus();
   }, 0);
 }
-type onDeleteProps = {
-  currentInputText: string;
-  inputRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
-  index: number;
-  blocks: Block[];
-  setBlocks: any;
-  currLevel: number;
-  editor: any;
-};
 
 // TODO: preverse the cursor position
 
@@ -97,12 +85,9 @@ export function onDelete({
   setBlocks,
   editor,
   currLevel,
-}: onDeleteProps) {
+}: Inputs) {
   const text = sanitize(currentInputText) as string;
   const cursorPosition = getCaretPosition(inputRefs.current[index]);
-
-  // Only downgrade header if cursor is at start
-
 
   if (currLevel === 0) {
     // do nothing
@@ -115,13 +100,12 @@ export function onDelete({
     blocks[currLevel - 1].data.text += text;
     blocks[currLevel].data.text = "";
 
-    console.log("prevBlockLength", prevBlockLength);
     editor.deleteBlock(blocks, setBlocks, currLevel);
 
-    setTimeout(() => {
-      inputRefs?.current[currLevel - 1]?.focus();
-      setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
-    }, 0);
+    // setTimeout(() => {
+    inputRefs?.current[currLevel - 1]?.focus();
+    setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
+    // }, 0);
   }
 }
 
@@ -143,4 +127,66 @@ export function onHeader({
     editor.changeBlockType(setBlocks, currLevel, newType);
     setBlocks([...blocks]);
   }
+}
+
+// splits block text with spaces
+// checks the first part of the split
+// change block type cording to the first split sytax
+// remove the sytax and keep the remaining text
+// change for valid sytax
+
+export function onSpace({
+  editor,
+  currentInputText,
+  blocks,
+  inputRefs,
+  index,
+  setBlocks,
+  currLevel,
+}: Inputs) {
+  // const cursorPosition = getCaretPosition(inputRefs.current[index]);
+
+  const splitText = currentInputText.split(" ");
+  const syntax = splitText[0];
+
+  console.log("1", splitText, syntax, splitText.length);
+
+  splitText.shift();
+  let text: string;
+
+  if (splitText.length) {
+    text = splitText.join(" ");
+  } else {
+    text = " ";
+  }
+
+  console.log("2", splitText, syntax, text, splitText.length);
+  // if (cursorPosition === 0) {
+  // const syntaxLength = syntax.length;
+
+  switch (syntax) {
+    case "#":
+      editor.changeBlockType(setBlocks, currLevel, BlockType.H1);
+      break;
+
+    default:
+  }
+
+  // useless, remove the synxtax split
+  console.log("3", splitText, syntax, text, splitText.length);
+  setTimeout(() => {
+    if (text) {
+      blocks[index].data.text = text;
+      currentInputText = text;
+    } else {
+      blocks[index].data.text = "";
+      currentInputText = "";
+    }
+    setCaretPosition(inputRefs.current[currLevel], 0);
+    setBlocks([...blocks]);
+    console.log("4", splitText, syntax, text, splitText.length);
+  }, 0);
+
+  console.log(blocks);
+  // }
 }

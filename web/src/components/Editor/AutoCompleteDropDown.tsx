@@ -1,3 +1,5 @@
+// TODO: depricated
+
 type Props = {
   autoCompleteWords: { title: string; description: string }[];
   term: string;
@@ -10,15 +12,15 @@ export default function AutoCompleteDropDown({
   onSelect,
 }: Props) {
   const filteredWords = autoCompleteWords.filter((word) =>
-    word.title.toLowerCase().includes(term.toLowerCase())
+    word.title.toLowerCase().includes(term.toLowerCase()),
   );
 
   return (
-    <div className="absolute bg-white border border-gray-300 rounded shadow-md">
+    <div className="absolute rounded border border-gray-300 bg-white shadow-md">
       {filteredWords.map((word) => (
         <div
           key={word.title}
-          className="p-2 cursor-pointer hover:bg-gray-100"
+          className="cursor-pointer p-2 hover:bg-gray-100"
           onClick={() => onSelect(word.title)}
         >
           <strong>{word.title}</strong> - {word.description}

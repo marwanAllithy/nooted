@@ -63,7 +63,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
-          className="p-2 text-6xl font-extrabold"
+          className="p-2 text-6xl font-black"
         />
       );
     case BlockType.H2:
@@ -74,7 +74,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
-          className="p-2 text-5xl font-bold"
+          className="p-2 text-5xl font-extrabold"
         />
       );
     case BlockType.H3:
@@ -86,6 +86,39 @@ export default function BlockElement({
           index={index}
           blockType={currBlockType}
           className="p-2 text-4xl font-extrabold"
+        />
+      );
+    case BlockType.H4:
+      return (
+        <InputTextBlock
+          handleKeyDown={onKeyDown}
+          block={block}
+          inputRefs={inputRefs}
+          index={index}
+          blockType={currBlockType}
+          className="p-2 text-3xl font-bold"
+        />
+      );
+    case BlockType.H5:
+      return (
+        <InputTextBlock
+          handleKeyDown={onKeyDown}
+          block={block}
+          inputRefs={inputRefs}
+          index={index}
+          blockType={currBlockType}
+          className="p-2 text-2xl font-semibold"
+        />
+      );
+    case BlockType.H6:
+      return (
+        <InputTextBlock
+          handleKeyDown={onKeyDown}
+          block={block}
+          inputRefs={inputRefs}
+          index={index}
+          blockType={currBlockType}
+          className="p-2 text-xl font-semibold"
         />
       );
   }

@@ -1,4 +1,4 @@
-import { onDelete, onEnter, onHeader } from "./keybinds";
+import { onDelete, onEnter, onHeader, onSpace } from "./keybinds";
 import { getCaretPosition } from "../utils";
 import type Block from "./Block";
 
@@ -67,22 +67,31 @@ export default function handleKeyDown({
       break;
 
     case "Backspace":
+      // event.preventDefault();
+      console.log(currentInputText);
+      setBlocks(blocks);
       onDelete({
         ...inputs,
       });
+      setBlocks(blocks);
       break;
 
-    case "#":
-      console.log("onHeader");
-      onHeader({
+      // case "#":
+      //   console.log("onHeader");
+      //   onHeader({
+      //     ...inputs,
+      //   });
+      break;
+    case " ":
+      onSpace({
         ...inputs,
       });
+
       break;
     default:
       // save edits
       blocks[currLevel].data.text = currentInputText as string;
       setBlocks(blocks);
-
       break;
   }
 }
