@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type Block from "./Editor/Block";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -27,7 +28,6 @@ export function getCaretPosition(editableDiv: HTMLDivElement | null): number {
 
   return caretPos;
 }
-// ...existing code...
 
 export function setCaretPosition(
   editableDiv: HTMLDivElement | null,
@@ -75,4 +75,14 @@ export function setCaretPosition(
 
   selection.removeAllRanges();
   selection.addRange(range);
+}
+
+type ReorderBlocksType = { setBlocks: any; blocks: Block[] };
+
+export function reorderBlocks({ setBlocks, blocks }: ReorderBlocksType) {
+  blocks.map((block: Block, index: number) => {
+    block.level = index;
+  });
+
+  setBlocks(blocks);
 }

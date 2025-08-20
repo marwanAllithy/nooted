@@ -2,6 +2,7 @@ import Block from "@/lib/Editor/Block";
 import Editor from "@/lib/Editor/Editor";
 import { useState, useRef, useEffect } from "react";
 import BlockElement from "./BlockElement";
+import { reorderBlocks } from "@/lib/utils";
 
 const editor = new Editor();
 
@@ -21,13 +22,15 @@ export default function EditorComponent() {
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
-    setBlocks(blocks);
+    // setBlocks(blocks);
+    reorderBlocks({ setBlocks, blocks });
   }, []);
 
   return (
     <div id="editor">
       {blocks.map((block, index) => (
         <BlockElement
+          key={block.level}
           setBlocks={setBlocks}
           blocks={blocks}
           block={block}

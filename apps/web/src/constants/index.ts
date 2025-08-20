@@ -1,5 +1,7 @@
+import { BlockType } from "@/types/editor";
+
 const autoCompleteTerms = [
- {
+  {
     title: "text",
     description: "Text block",
   },
@@ -28,4 +30,16 @@ const autoCompleteTerms = [
     description: "Heading 6",
   },
 ];
-export { autoCompleteTerms };
+
+const headerTypes = [
+  BlockType.H1,
+  BlockType.H2,
+  BlockType.H3,
+  BlockType.H4,
+  BlockType.H5,
+  BlockType.H6,
+];
+
+const validSytax = ["#", "##", "###", "####", "#####", "######", "-"];
+
+export { autoCompleteTerms, headerTypes, validSytax };

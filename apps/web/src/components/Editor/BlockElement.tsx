@@ -1,5 +1,5 @@
 import Block from "@/lib/Editor/Block";
-import React, { useEffect } from "react";
+import React from "react";
 import { BlockType } from "@/types/editor";
 import { InputTextBlock } from "../blocks";
 import handleKeyDown from "@/lib/Editor/keypress";
@@ -37,10 +37,6 @@ export default function BlockElement({
       editor,
     });
   };
-
-  useEffect(() => {
-    setBlocks(blocks);
-  }, [block, blocks, setBlocks, inputRefs]);
 
   // TODO: add change block feature
   switch (currBlockType) {

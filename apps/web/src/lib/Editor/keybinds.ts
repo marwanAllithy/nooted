@@ -1,6 +1,7 @@
 import { BlockType } from "@/types/editor";
 import { getCaretPosition, sanitize, setCaretPosition } from "../utils";
 import type Block from "./Block";
+import { headerTypes, validSytax } from "@/constants";
 
 type Inputs = {
   currentInputText: string;
@@ -10,16 +11,9 @@ type Inputs = {
   setBlocks: any;
   currLevel: number;
   editor: any;
+  event?: any;
 };
 
-const headerTypes = [
-  BlockType.H1,
-  BlockType.H2,
-  BlockType.H3,
-  BlockType.H4,
-  BlockType.H5,
-  BlockType.H6,
-];
 // TODO: move into editor class
 
 export function onEnter({
@@ -85,27 +79,51 @@ export function onDelete({
   setBlocks,
   editor,
   currLevel,
+  event,
 }: Inputs) {
   const text = sanitize(currentInputText) as string;
   const cursorPosition = getCaretPosition(inputRefs.current[index]);
+  const prevRef = inputRefs.current[currLevel - 1];
+  const prevBlockLength = prevRef?.innerText.length ?? 0;
 
   if (currLevel === 0) {
-    // do nothing
-  } else if (cursorPosition === 0 && text === "") {
-    editor.deleteBlock(blocks, setBlocks, currLevel);
-    inputRefs?.current[currLevel - 1]?.focus();
-  } else if (cursorPosition === 0 && text !== "") {
-    // add the remaining text to the block before
-    const prevBlockLength = blocks[currLevel - 1].data.text.length;
-    blocks[currLevel - 1].data.text += text;
-    blocks[currLevel].data.text = "";
+    return;
+  }
 
+  // deleting an empty current block -> remove block
+  if (cursorPosition === 0 && text === "") {
+    event.preventDefault();
     editor.deleteBlock(blocks, setBlocks, currLevel);
+    setTimeout(() => {
+      inputRefs?.current[currLevel - 1]?.focus();
+    }, 0);
+    return;
+  }
 
-    // setTimeout(() => {
-    inputRefs?.current[currLevel - 1]?.focus();
-    setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
-    // }, 0);
+  // merging current non-empty text into previous block
+  if (cursorPosition === 0 && text !== "") {
+    // prevent browser from performing its default backspace merge/delete
+    event.preventDefault();
+
+    // merge immutably: prevText + current text
+    const prevText = (blocks[currLevel - 1]?.data?.text as string) ?? "";
+    const mergedPrevText = prevText + text;
+
+    // create a new blocks array where previous block has merged text
+    const newBlocks = blocks.map((b, i) =>
+      i === currLevel - 1
+        ? { ...b, data: { ...b.data, text: mergedPrevText } }
+        : b,
+    );
+
+    // delete current block (editor.deleteBlock will recompute levels and call setBlocks)
+    editor.deleteBlock(newBlocks, setBlocks, currLevel);
+
+    // focus previous and restore caret at end of previous (use timeout to let React apply updates)
+    setTimeout(() => {
+      inputRefs?.current[currLevel - 1]?.focus();
+      setCaretPosition(inputRefs.current[currLevel - 1], prevBlockLength);
+    }, 0);
   }
 }
 
@@ -129,64 +147,50 @@ export function onHeader({
   }
 }
 
-// splits block text with spaces
-// checks the first part of the split
-// change block type cording to the first split sytax
-// remove the sytax and keep the remaining text
-// change for valid sytax
-
 export function onSpace({
   editor,
   currentInputText,
   blocks,
-  inputRefs,
   index,
   setBlocks,
   currLevel,
 }: Inputs) {
-  // const cursorPosition = getCaretPosition(inputRefs.current[index]);
-
   const splitText = currentInputText.split(" ");
-  const syntax = splitText[0];
+  const syntax = sanitize(splitText[0]);
 
   console.log("1", splitText, syntax, splitText.length);
 
-  splitText.shift();
-  let text: string;
+  let text: string = "";
 
-  if (splitText.length) {
-    text = splitText.join(" ");
-  } else {
-    text = " ";
-  }
-
-  console.log("2", splitText, syntax, text, splitText.length);
-  // if (cursorPosition === 0) {
-  // const syntaxLength = syntax.length;
-
-  switch (syntax) {
-    case "#":
-      editor.changeBlockType(setBlocks, currLevel, BlockType.H1);
-      break;
-
-    default:
-  }
-
-  // useless, remove the synxtax split
-  console.log("3", splitText, syntax, text, splitText.length);
   setTimeout(() => {
-    if (text) {
-      blocks[index].data.text = text;
-      currentInputText = text;
+    if (splitText.length) {
+      splitText.shift();
+      text = splitText.join(" ");
     } else {
-      blocks[index].data.text = "";
-      currentInputText = "";
+      text = " ";
     }
-    setCaretPosition(inputRefs.current[currLevel], 0);
-    setBlocks([...blocks]);
-    console.log("4", splitText, syntax, text, splitText.length);
   }, 0);
 
-  console.log(blocks);
-  // }
+  if (validSytax.includes(syntax)) {
+    console.log("2", splitText, syntax, text, splitText.length);
+
+    setTimeout(() => {
+      if (text) {
+        blocks[index].data.text = text;
+        currentInputText = text;
+      } else {
+        blocks[index].data.text = "";
+        currentInputText = "";
+      }
+    }, 0);
+
+    switch (syntax) {
+      case "#":
+        editor.changeBlockType(setBlocks, currLevel, BlockType.H1, "");
+        break;
+
+      default:
+    }
+    console.log("3", splitText, syntax, text, splitText.length);
+  }
 }

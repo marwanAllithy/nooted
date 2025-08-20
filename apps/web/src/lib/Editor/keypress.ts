@@ -1,13 +1,14 @@
 import { onDelete, onEnter, onHeader, onSpace } from "./keybinds";
 import { getCaretPosition } from "../utils";
 import type Block from "./Block";
+import type React from "react";
 
 type HandleKeydownProps = {
   event: React.KeyboardEvent<HTMLDivElement>;
   currLevel: number;
   blocks: Block[];
   setBlocks: React.Dispatch<React.SetStateAction<Block[]>>;
-  inputRefs: React.MutableRefObject<(HTMLDivElement | null)[]>;
+  inputRefs: React.RefObject<(HTMLDivElement | null)[]>;
   index: number;
   editor: any;
 };
@@ -22,11 +23,10 @@ export default function handleKeyDown({
   editor,
 }: HandleKeydownProps) {
   const currentInputText = inputRefs.current[index]?.innerText as string;
+  const currCursorPosition = getCaretPosition(inputRefs.current[index]);
 
   const prevBlockLength = blocks[currLevel - 1]?.data.text.length;
   const nextBlockLength = blocks[currLevel + 1]?.data.text.length;
-
-  const currCursorPosition = getCaretPosition(inputRefs.current[index]);
 
   const inputs = {
     editor,
@@ -67,31 +67,35 @@ export default function handleKeyDown({
       break;
 
     case "Backspace":
-      // event.preventDefault();
-      console.log(currentInputText);
-      setBlocks(blocks);
       onDelete({
         ...inputs,
+        event,
       });
-      setBlocks(blocks);
       break;
 
-      // case "#":
-      //   console.log("onHeader");
-      //   onHeader({
-      //     ...inputs,
-      //   });
-      break;
-    case " ":
-      onSpace({
+    case "#":
+      console.log("onHeader");
+      onHeader({
         ...inputs,
       });
-
       break;
+
+    case " ":
+      // event.preventDefault();
+      onSpace({
+        ...inputs,
+        event,
+      });
+      break;
+
     default:
-      // save edits
-      blocks[currLevel].data.text = currentInputText as string;
-      setBlocks(blocks);
+      // update the changed block immutably immediately (no redundant timeouts)
+      const updatedBlocks = blocks.map((b, i) =>
+        i === currLevel
+          ? { ...b, data: { ...b.data, text: currentInputText } }
+          : b,
+      );
+      setBlocks(updatedBlocks);
       break;
   }
 }

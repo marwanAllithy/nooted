@@ -1,48 +1,19 @@
-import { BlockType } from "@/types/editor";
 import Block from "./Block";
 import { setCaretPosition } from "../utils";
+import { BlockType } from "@/types/editor";
 
 export default class Editor {
   blocks: Block[];
+  private nextId = 0;
 
   constructor() {
-    this.blocks = [
-      {
-        level: 0,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-      {
-        level: 1,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-      {
-        level: 2,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-      {
-        level: 3,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-      {
-        level: 4,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-      {
-        level: 5,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-      {
-        level: 6,
-        type: BlockType.TEXT,
-        data: { text: "" },
-      },
-    ];
+    // create initial blocks with stable ids
+    this.blocks = Array.from({ length: 7 }).map((_, i) => ({
+      id: this.nextId++,
+      level: i,
+      type: BlockType.TEXT,
+      data: { text: "" },
+    }));
   }
 
   addBlock(
@@ -54,33 +25,62 @@ export default class Editor {
   ) {
     const firstHalf = currBlocks.slice(0, currLevel + 1);
     const secondHalf = currBlocks.slice(currLevel + 1);
-    // const id = this.blocks.length;
-    const newBlock = new Block(currLevel + 1, type, text);
-    secondHalf.forEach((block: any) => {
-      block.level += 1;
-    });
-    setBlocks([...firstHalf, newBlock, ...secondHalf]);
+
+    // create new block with unique id and correct level
+    const newBlock = {
+      id: this.nextId++,
+      level: currLevel + 1,
+      type,
+      data: { text },
+    };
+
+    // produce a new array and bump levels immutably
+    const updatedSecond = secondHalf.map((b: any) => ({
+      ...b,
+      level: b.level + 1,
+    }));
+
+    setBlocks([...firstHalf, newBlock, ...updatedSecond]);
   }
 
   deleteBlock(currBlocks: Block[], setBlocks: any, currLevel: number) {
     const firstHalf = currBlocks.slice(0, currLevel);
     const secondHalf = currBlocks.slice(currLevel + 1);
-    secondHalf.forEach((block: any) => {
-      block.level -= 1;
-    });
 
-    setBlocks([...firstHalf, ...secondHalf]);
-    console.log("blocks after delete", currBlocks);
+    // rebuild array and recompute levels immutably
+    const updated = [...firstHalf, ...secondHalf].map((b: any, i: number) => ({
+      ...b,
+      level: i,
+    }));
+
+    setBlocks(updated);
+    console.log("blocks after delete", updated);
   }
 
-  changeBlockType(setBlocks: any, currLevel: number, type: BlockType) {
+  // ...existing code...
+  changeBlockType(
+    setBlocks: any,
+    currLevel: number,
+    type: BlockType,
+    text?: string,
+  ) {
     setBlocks((prevBlocks: any) => {
       const updatedBlocks = [...prevBlocks];
-      updatedBlocks[currLevel].type = type;
+      const existing = updatedBlocks[currLevel] ?? { data: { text: "" } };
+
+      updatedBlocks[currLevel] = {
+        ...existing,
+        type,
+        data: {
+          ...existing.data,
+          text: text !== undefined ? text : (existing.data?.text ?? ""),
+        },
+      };
+
       return updatedBlocks;
     });
   }
-
+  /*...existing code...*/
   // updateBlock(
   //   blocks: Block[],
   //   setBlocks: any,
