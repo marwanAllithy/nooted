@@ -45,7 +45,6 @@ export default class Editor {
     ];
   }
 
-  // test
   addBlock(
     currBlocks: any,
     setBlocks: any,
