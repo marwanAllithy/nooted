@@ -24,7 +24,7 @@ export default function EditorSidebar({ currentPath, onOpenFile }: Props) {
       variant="sidebar"
       collapsible="offcanvas"
       className=""
-      style={{ "--sidebar-width": "25rem" } as React.CSSProperties}
+      style={{ "--sidebar-width": "18rem" } as React.CSSProperties}
     >
       <SidebarHeader />
       <SidebarContent>

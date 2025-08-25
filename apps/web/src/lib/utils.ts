@@ -86,3 +86,15 @@ export function reorderBlocks({ setBlocks, blocks }: ReorderBlocksType) {
 
   setBlocks(blocks);
 }
+
+export function moveBlock(blocks: Block[], from: number, to: number): Block[] {
+  const n = blocks.length;
+  const safeFrom = Math.max(0, Math.min(from, n - 1));
+  const safeTo = Math.max(0, Math.min(to, n)); // allow n (append)
+  if (safeFrom === safeTo || n <= 1)
+    return blocks.slice().map((b, i) => ({ ...b, level: i }));
+  const next = blocks.slice();
+  const [moved] = next.splice(safeFrom, 1);
+  next.splice(safeTo, 0, moved);
+  return next.map((b, i) => ({ ...b, level: i }));
+}
