@@ -1,0 +1,44 @@
+{
+  "blocks": [
+    {
+      "id": 0,
+      "level": 0,
+      "type": "h2",
+      "data": {
+        "text": "Subheading"
+      }
+    },
+    {
+      "id": 1,
+      "level": 1,
+      "type": "text",
+      "data": {
+        "text": "Some body text"
+      }
+    },
+    {
+      "id": 7,
+      "level": 2,
+      "type": "text",
+      "data": {
+        "text": "asdasdsad"
+      }
+    },
+    {
+      "id": 7,
+      "level": 3,
+      "type": "text",
+      "data": {
+        "text": ""
+      }
+    },
+    {
+      "id": 9,
+      "level": 4,
+      "type": "bulletpoint",
+      "data": {
+        "text": "asdasds"
+      }
+    }
+  ]
+}
