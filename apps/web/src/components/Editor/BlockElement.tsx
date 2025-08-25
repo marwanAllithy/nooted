@@ -51,6 +51,20 @@ export default function BlockElement({
           className=""
         />
       );
+    case BlockType.BULLETPOINT:
+      return (
+        <div className="flex items-start gap-2">
+          <span className="select-none">-</span>
+          <InputTextBlock
+            handleKeyDown={onKeyDown}
+            block={block}
+            inputRefs={inputRefs}
+            index={index}
+            blockType={currBlockType}
+            className=""
+          />
+        </div>
+      );
     case BlockType.H1:
       return (
         <InputTextBlock
