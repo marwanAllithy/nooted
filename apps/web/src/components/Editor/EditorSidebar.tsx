@@ -11,7 +11,6 @@ import {
   SidebarMenuItem,
 } from "../ui/sidebar";
 import { TEST_FILES } from "@/lib/testData";
-import React from "react";
 
 type Props = {
   currentPath: string | null;
@@ -20,12 +19,7 @@ type Props = {
 
 export default function EditorSidebar({ currentPath, onOpenFile }: Props) {
   return (
-    <Sidebar
-      variant="sidebar"
-      collapsible="offcanvas"
-      className=""
-      style={{ "--sidebar-width": "18rem" } as React.CSSProperties}
-    >
+    <Sidebar variant="sidebar" collapsible="offcanvas" className="">
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup>
