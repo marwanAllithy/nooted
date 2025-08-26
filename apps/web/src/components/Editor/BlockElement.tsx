@@ -1,6 +1,6 @@
 import Block from "@/lib/Editor/Block";
 import React from "react";
-import { BlockType } from "@/types/editor";
+import { BlockType } from "@/types";
 import { InputTextBlock } from "../blocks";
 import handleKeyDown from "@/lib/Editor/keypress";
 

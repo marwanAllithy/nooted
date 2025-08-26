@@ -1,6 +1,6 @@
 import Block from "./Block";
 import { setCaretPosition } from "../utils";
-import { BlockType } from "@/types/editor";
+import { BlockType } from "@/types";
 
 export default class Editor {
   blocks: Block[];

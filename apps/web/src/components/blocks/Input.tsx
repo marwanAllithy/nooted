@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import type Block from "@/lib/Editor/Block";
 // import { Card } from "../ui/card";
-import type { BlockType } from "@/types/editor";
+import type { BlockType } from "@/types";
 import { cn, getCaretPosition, setCaretPosition } from "@/lib/utils";
 
 interface Props {

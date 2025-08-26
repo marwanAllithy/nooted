@@ -1,4 +1,4 @@
-import { BlockType } from "@/types/editor";
+import { BlockType } from "@/types";
 
 const autoCompleteTerms = [
   {

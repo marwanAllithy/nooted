@@ -1,4 +1,4 @@
-import { BlockType } from "@/types/editor";
+import { BlockType } from "@/types";
 import { getCaretPosition, sanitize, setCaretPosition } from "../utils";
 import type Block from "./Block";
 import { headerTypes, validSytax } from "@/constants";
