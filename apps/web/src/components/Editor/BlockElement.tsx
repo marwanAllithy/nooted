@@ -3,6 +3,7 @@ import React from "react";
 import { BlockType } from "@/types";
 import { InputTextBlock } from "../blocks";
 import handleKeyDown from "@/lib/Editor/keypress";
+import { getCaretPosition, setCaretPosition } from "@/lib/utils";
 
 type Props = {
   blocks: Block[];
@@ -38,6 +39,28 @@ export default function BlockElement({
     });
   };
 
+  const onInputChange = (text: string) => {
+    const el = inputRefs.current[index];
+    const caret = getCaretPosition(el as HTMLDivElement);
+    setBlocks((prev: Block[]) =>
+      prev.map((b, i) =>
+        i === index ? { ...b, data: { ...b.data, text } } : b,
+      ),
+    );
+    // Restore focus and caret after the re-render
+    setTimeout(() => {
+      const target = inputRefs.current[index] as HTMLDivElement | null;
+      if (!target) return;
+
+      const isFocused = document.activeElement === target;
+      if (!isFocused) {
+        target.focus();
+        const len = (target.innerText || "").length;
+        setCaretPosition(target as HTMLDivElement, Math.min(caret, len));
+      }
+    }, 0);
+  };
+
   // TODO: add change block feature
   switch (currBlockType) {
     case BlockType.TEXT:
@@ -48,6 +71,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className=""
         />
       );
@@ -61,6 +85,7 @@ export default function BlockElement({
             inputRefs={inputRefs}
             index={index}
             blockType={currBlockType}
+            onInputChange={onInputChange}
             className=""
           />
         </div>
@@ -73,6 +98,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className="p-2 text-6xl font-black"
         />
       );
@@ -84,6 +110,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className="p-2 text-5xl font-extrabold"
         />
       );
@@ -95,6 +122,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className="p-2 text-4xl font-extrabold"
         />
       );
@@ -106,6 +134,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className="p-2 text-3xl font-bold"
         />
       );
@@ -117,6 +146,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className="p-2 text-2xl font-semibold"
         />
       );
@@ -128,6 +158,7 @@ export default function BlockElement({
           inputRefs={inputRefs}
           index={index}
           blockType={currBlockType}
+          onInputChange={onInputChange}
           className="p-2 text-xl font-semibold"
         />
       );

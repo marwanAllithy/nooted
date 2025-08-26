@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import type Block from "@/lib/Editor/Block";
 // import { Card } from "../ui/card";
 import type { BlockType } from "@/types";
-import { cn, getCaretPosition, setCaretPosition } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface Props {
   block: Block;
@@ -11,6 +11,7 @@ interface Props {
   handleKeyDown: any;
   blockType: BlockType;
   className?: string;
+  onInputChange: (text: string) => void;
   //   blockType: BlockType;
 }
 
@@ -21,6 +22,7 @@ export default function InputTextBlock({
   index,
   // blockType,
   className = "",
+  onInputChange,
 }: Props) {
   const ref = React.useRef<HTMLDivElement | null>(null);
   const mounted = useRef(false);
@@ -35,20 +37,11 @@ export default function InputTextBlock({
     }
   }, []);
 
-  // update only when text actually differs; save & restore caret
-  useEffect(() => {
-    if (!ref.current) return;
-    if (ref.current.innerText === block.data.text) return;
-    const caret = getCaretPosition(ref.current);
-    ref.current.innerText = block.data.text;
-    // clamp caret to new text length
-    setCaretPosition(ref.current, Math.min(caret, block.data.text.length));
-  }, [block.data.text]);
+  // Avoid overwriting DOM while typing; rely on key handler updates.
 
   return (
     <div className="relative">
       <div
-        key={block?.level}
         ref={(el) => {
           ref.current = el;
           inputRefs.current[index] = el;
@@ -56,6 +49,7 @@ export default function InputTextBlock({
         contentEditable
         suppressContentEditableWarning={true}
         onKeyDown={(e) => handleKeyDown(e, block.level)}
+        onInput={() => onInputChange(ref.current?.innerText ?? "")}
         className={cn(
           "border-none ring-0 outline-none focus:ring-0 focus:outline-none",
           className,

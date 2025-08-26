@@ -1,4 +1,11 @@
-@import 'tailwindcss';
+/*
+  Theme control
+  - Default colors live in :root (light) and .dark (dark) CSS vars below.
+  - Tailwind uses these via @theme inline and @layer base (bg-background/text-foreground).
+  - To make dark the default everywhere, we add class="dark" on <html> (set in index.html).
+  - To tweak global colors, edit the variables in :root or .dark here.
+*/
+@import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
@@ -7,15 +14,15 @@
 body {
   @apply m-0;
   font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 :root {
@@ -55,38 +62,45 @@ code {
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.141 0.005 285.823);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.141 0.005 285.823);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.274 0.006 286.033);
-  --input: oklch(0.274 0.006 286.033);
-  --ring: oklch(0.442 0.017 285.786);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.274 0.006 286.033);
-  --sidebar-ring: oklch(0.442 0.017 285.786);
+  /* Dark preset: pure black background and white text */
+  --background: #000; /* used by bg-background */
+  --foreground: #fff; /* used by text-foreground */
+  --card: #000;
+  --card-foreground: #fff;
+  --popover: #000;
+  --popover-foreground: #fff;
+  /* Primary on dark: white surface with black text for contrast */
+  --primary: #fff;
+  --primary-foreground: #000;
+  /* Subtle surfaces on dark */
+  --secondary: #0a0a0a;
+  --secondary-foreground: #fff;
+  --muted: #0a0a0a;
+  --muted-foreground: #a3a3a3;
+  --accent: #0a0a0a;
+  --accent-foreground: #fff;
+  /* Destructive tones */
+  --destructive: #7f1d1d; /* dark red */
+  --destructive-foreground: #fee2e2;
+  /* Borders/inputs/ring */
+  --border: #222;
+  --input: #222;
+  --ring: #3b82f6; /* blue-500 */
+  /* Charts (kept vivid) */
+  --chart-1: #60a5fa;
+  --chart-2: #34d399;
+  --chart-3: #f59e0b;
+  --chart-4: #a78bfa;
+  --chart-5: #f472b6;
+  /* Sidebar */
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #fff;
+  --sidebar-primary: #111827;
+  --sidebar-primary-foreground: #fff;
+  --sidebar-accent: #0a0a0a;
+  --sidebar-accent-foreground: #fff;
+  --sidebar-border: #222;
+  --sidebar-ring: #3b82f6;
 }
 
 @theme inline {

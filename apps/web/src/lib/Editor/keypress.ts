@@ -89,13 +89,7 @@ export default function handleKeyDown({
       break;
 
     default:
-      // update the changed block immutably immediately (no redundant timeouts)
-      const updatedBlocks = blocks.map((b, i) =>
-        i === currLevel
-          ? { ...b, data: { ...b.data, text: currentInputText } }
-          : b,
-      );
-      setBlocks(updatedBlocks);
+      // No-op here; onInput will sync text to state.
       break;
   }
 }

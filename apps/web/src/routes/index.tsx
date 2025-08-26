@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 
 function App() {
   return (
-    <div className="p-6">
+    <div className="p-6 bg-black text-white">
       <EditorComponent />
     </div>
   );

@@ -66,13 +66,13 @@ export default function EditorComponent() {
       onHandlePointerDown,
     } = useDragDrop();
     return (
-      <div id="editor" className="p-6">
+      <div id="editor" className="p-6 bg-black text-white">
         {blocks.map((block, index) => {
           const showBefore = dragging && dragOverIndex === index;
           const isDraggingItem = dragging && draggingFrom === index;
           return (
             <div
-              key={block.level}
+              key={block.id}
               ref={(el) => {
                 containerRefs.current[index] = el;
               }}

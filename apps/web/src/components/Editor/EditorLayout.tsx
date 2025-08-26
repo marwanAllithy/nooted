@@ -28,13 +28,13 @@ export default function EditorLayout({
 
   return (
     <SidebarProvider
-      className="h-full w-full"
+      className="h-full w-full bg-black text-white"
       style={{ "--sidebar-width": sidebarWidth } as React.CSSProperties}
     >
       <EditorSidebar currentPath={currentPath} onOpenFile={onOpenFile} />
       <SidebarInset>
         {/* Top navbar inside the editor area */}
-        <div className="flex h-12 items-center gap-2 border-b px-4 sm:px-6">
+        <div className="flex  h-12 items-center gap-2  border-b px-4 sm:px-6">
           <SidebarTrigger />
           <div className="text-muted-foreground text-sm">{title}</div>
           <Separator orientation="vertical" className="mx-2 h-6" />

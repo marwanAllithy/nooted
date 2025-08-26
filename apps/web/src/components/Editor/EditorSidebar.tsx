@@ -19,7 +19,11 @@ type Props = {
 
 export default function EditorSidebar({ currentPath, onOpenFile }: Props) {
   return (
-    <Sidebar variant="sidebar" collapsible="offcanvas" className="">
+    <Sidebar
+      variant="sidebar"
+      collapsible="offcanvas"
+      className="bg-black text-white"
+    >
       <SidebarHeader />
       <SidebarContent>
         <SidebarGroup>
